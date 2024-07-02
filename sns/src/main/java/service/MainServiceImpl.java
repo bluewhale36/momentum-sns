@@ -166,11 +166,6 @@ public class MainServiceImpl implements IF_MainService{
 		return maindao.getRecommendPostList(recomMap);
 	}
 
-	@Override
-	public int getPostMaxNo() throws Exception {
-		return maindao.getPostMaxNo();
-	}
-
 
 
 }

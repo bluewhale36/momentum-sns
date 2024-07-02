@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -37,8 +38,6 @@ public class MainController {
 	
 	// 세션 로그인 유저가 팔로우하는 아이디 리스트
 	List<String> followIdList;
-	// 가장 최근에 업로드 된 게시물 번호
-	int postMaxNo;
 	// 세션 로그인 유저가 팔로우하는 아이디에 대해 출력된 게시물 번호
 	List<Integer> selectedPostNoList = new ArrayList<>();
 
@@ -62,7 +61,9 @@ public class MainController {
 		
 		List<PostVO> postList = mser.getFollowingPostList(fPostMap);
 		for (PostVO pvo : postList) {
+			// 파일 추가
 			pvo.setFilename(mser.getAttach(pvo.getNo()));
+			// 현재 출력 된 게시물 번호 미리 저장. 추후 추천 게시물에서는 출력되지 않도록 하기 위함.
 			selectedPostNoList.add((Integer)pvo.getNo());
 			System.out.println(pvo.toString());
 		}
@@ -78,8 +79,6 @@ public class MainController {
 			// 해당 글의 리포스트 수
 			pvo.setReCnt(reCnt);
 		}
-		
-		postMaxNo = mser.getPostMaxNo();
 		
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
@@ -156,6 +155,7 @@ public class MainController {
 		return "myPost";
 	}
 
+	// 팔로우 한 유저의 게시물 페이징
 	@GetMapping("newFollowingPost")
 	public String newFollowingPost(@RequestParam("pageNo")int pageNo, Model model) throws Exception {
 		
@@ -164,8 +164,11 @@ public class MainController {
 		fPostMap.put("fList", followIdList);
 		
 		List<PostVO> postList = mser.getFollowingPostList(fPostMap);
+		System.out.println("followingPost");
 		for (PostVO pvo : postList) {
+			// 파일 선택
 			pvo.setFilename(mser.getAttach(pvo.getNo()));
+			// 현재 출력 된 게시물 번호 미리 저장. 추후 추천 게시물에서는 출력되지 않도록 하기 위함.
 			selectedPostNoList.add((Integer)pvo.getNo());
 			System.out.println(pvo.toString());
 		}
@@ -180,8 +183,7 @@ public class MainController {
 			// 해당 글의 리포스트 수
 			pvo.setReCnt(reCnt);
 		}
-		
-		postMaxNo = mser.getPostMaxNo();
+	
 		
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
@@ -191,16 +193,22 @@ public class MainController {
 		return "main";
 	}
 	
+	// 팔로우한 유저 게시물 페이징 이후 추천 게시물 페이징
 	@GetMapping("newRecomPost")
 	public String newRecomPost(@RequestParam("pageNo")int pageNo, Model model) throws Exception {
 		
+		for (Integer i : selectedPostNoList) {
+			System.out.print(i+" ");			
+		}
+		System.out.println();
 		
 		HashMap<String, Object> recomMap = new HashMap<>();
 		recomMap.put("exList", selectedPostNoList);
-		recomMap.put("pageNo", postMaxNo-pageNo);
+		recomMap.put("pageNo", pageNo);
 		
 		List<PostVO> postList = mser.getRecommendPostList(recomMap);
 		for(PostVO pvo : postList) {
+			pvo.setFilename(mser.getAttach(pvo.getNo()));
 			System.out.println(pvo.toString());
 		}
 		for(PostVO pvo : postList) {

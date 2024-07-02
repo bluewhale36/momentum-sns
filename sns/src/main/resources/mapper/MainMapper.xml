@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<foreach collection="list" item="one" open="(" separator="," close=")">
 			#{one}
 		</foreach>
-		and p_date between localtimestamp - (interval '5' day) and localtimestamp
+		and p_date between localtimestamp - (interval '10' day) and localtimestamp
 		order by p_date) o)
 	</select>
 	
@@ -72,22 +72,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<foreach collection="fList" item="one" open="(" separator="," close=")">
 			#{one}
 		</foreach>
-		and p_date between localtimestamp - (interval '5' day) and localtimestamp
+		and p_date between localtimestamp - (interval '10' day) and localtimestamp
 		order by p_date) o)
 		where rn between #{pageNo}-9 and #{pageNo}
 		order by rn desc
 	</select>
 	
 	<select id="selectRecomPostRN" parameterType="hashmap" resultType="vo.PostVO">
-		select * from postTest where no not in
-		<foreach collection="exList" item="one" open="(" separator="," close=")">
-			#{one}
-		</foreach>
-		and no between #{pageNo}-9 and #{pageNo}
-		order by no desc
-	</select>
-	
-	<select id="selectPostMaxNo" resultType="_int">
-		select max(no) from postTest
+		select * from
+		(select rownum as rn, o.* from
+		(select * from postTest where
+		<if test="exList != null and exList.size() != 0">
+			no not in
+			<foreach collection="exList" item="one" open="(" separator="," close=")">
+				#{one}
+			</foreach>
+			and
+		</if>
+		p_date between localtimestamp - (interval '31' day) and localtimestamp
+		order by p_date desc)o
+		)
+		where rn between #{pageNo} and #{pageNo} +9
 	</select>
 </mapper>

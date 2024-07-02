@@ -128,13 +128,6 @@ public class MainDAOImpl implements IF_MainDAO{
 	public List<PostVO> getRecommendPostList(HashMap<String, Object> recomMap) throws Exception {
 		return sqlsession.selectList(mapperQuery+".selectRecomPostRN", recomMap);
 	}
-
-	@Override
-	public int getPostMaxNo() throws Exception {
-		return sqlsession.selectOne(mapperQuery+".selectPostMaxNo");
-	}
-
-
 	
 
 	

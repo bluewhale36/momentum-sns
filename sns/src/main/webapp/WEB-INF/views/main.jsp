@@ -248,23 +248,19 @@
     
     // 로그인 유저의 팔로우 유저가 작성한 게시물 중 가장 최신 게시물의 rownum.
     const maxNum = ${maxNum};
-   	// maxPage의 게시물 번호 (no)
-   	const maxNo = ${aList[0].no};
     // 로그인 유저의 팔로우 유저가 작성한 게시물 다음 페이지 시작 번호.
     let curFollowPage = maxNum - 10;
     // 추천 게시물 시작 번호
-    let curRecomPage = 0;
+    let curRecomPage = 1;
     // 이미 로딩된 기존 컨텐츠
     let prevCont;
     function mousewheelEvent() {
-        if ((window.scrollY + window.innerHeight)/document.body.clientHeight > 0.8) { // 마지막까지 스크롤 했을 때.
-        	console.log('maxnum is : '+maxNum);
-       		console.log('maxno is : '+maxNo);
+        if ((window.scrollY + window.innerHeight)/document.body.clientHeight > 0.85) { // 마지막까지 스크롤 했을 때.
         	// 이벤트 지워준다.
         	$('body').off('mousewheel');
         	// 이미 로딩된 기존 컨텐츠의 html 객체 저장.
     		prevCont = $('.myPost').html();
-        	// 0.3초 뒤 다음 코드 실행.
+        	// 0.25초 뒤 다음 코드 실행.
         	setTimeout(() => {        		
         		// 게시물 로딩되는 부분 새로 고침.
         		if (curFollowPage > 0) { // 팔로우 한 유저의 최근 게시물이 남아 있을 때까지
@@ -289,7 +285,7 @@
             		});
         		}
         		// 두 경우 모두에 속하지 않는 경우 스크롤 페이징 중단.
-        	}, '300');
+        	}, '250');
         }
     }
 

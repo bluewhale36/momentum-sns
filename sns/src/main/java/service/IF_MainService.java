@@ -47,7 +47,5 @@ public interface IF_MainService {
 	public List<PostVO> getFollowingPostList(HashMap<String, Object> fPostMap) throws Exception;
 	// 내가 팔로우하지 않은 사람의 게시물 출력
 	public List<PostVO> getRecommendPostList(HashMap<String, Object> recomMap) throws Exception;
-	// 가장 최근의 게시물 번호 반환
-	public int getPostMaxNo() throws Exception;
 	
 }
