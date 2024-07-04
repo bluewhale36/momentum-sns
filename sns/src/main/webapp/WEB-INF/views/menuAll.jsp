@@ -46,17 +46,6 @@
         </a>
         <br>
 
-        <a href="/sns/allList">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-compass"
-                viewBox="0 0 16 16">
-                <path
-                    d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016m6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
-                <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z" />
-            </svg>
-            <span>FIND</span>
-        </a>
-        <br>
-
         <a href="/sns/chatStart">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send"
                 viewBox="0 0 16 16">
@@ -113,6 +102,20 @@
         <button type="button" id="theme-change-btn" class="">theme change</button>
         <br>
         
+		<!--내가 팔로우하는 유저 목록 간단하게 보여주는 table-->
+	    <div id="simplefollowtable">
+	        <table>
+	            <thead>
+	                <tr>
+	                    <th colspan="2">FOLLOWINGS</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                
+	            </tbody>
+	        </table>
+	    </div>
+        
     </div>
     <div id="logout">
         <a href="/sns/logout" id="menu-logout">
@@ -126,6 +129,11 @@
 <script>
 
 	$(document).ready(function() {
+		getMyProfile();
+		getFollowings();
+	});
+	
+	function getMyProfile() {
 		$.ajax({
 			url: 'menu-profile',
 			type: 'get',
@@ -140,10 +148,44 @@
 				$('#menu-profile-id').text(result.id);
 			},
 			error: function() {
-				console.log('e');
+				alert('프로필 로딩 중 오류가 발생했습니다.');
 			}
 		});
-	});
+	}
+	
+	function getFollowings() {
+		$.ajax({
+			url: 'menu-followings',
+			type: 'get',
+			success: function(result) {
+				if (result != null && result.length != 0) {
+					let proText;
+					let proPhoto;
+					for (let pvo of result) {
+						if (pvo.photo == null) {
+							proPhoto = '/sns/resources/img/프로필.png';
+						} else {
+							proPhoto = `/sns/download?filename=\${pvo.photo}`;
+						}
+						proText = `<tr>
+		                    <td width="20%">
+			                    <div class="menu-following-photo-div">
+			                    	<img src="\${proPhoto}">
+			                    </div>
+		                    </td>
+		                    <td style="text-align: left" class="menu-following-name">\${pvo.nickName}</td>
+		                </tr>`;
+		                $('#simplefollowtable tbody').append(proText);
+					}
+				} else {
+					$('#simplefollowtable').remove();					
+				}
+			},
+			error: function() {
+				alert('팔로윙 유저 로딩 중 오류가 발생했습니다.');
+			}
+		});
+	}
 
 	$('#theme-change-btn').on('click', function() {
 		switchTheme();

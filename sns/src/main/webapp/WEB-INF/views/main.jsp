@@ -254,12 +254,16 @@
     let curRecomPage = 1;
     // 이미 로딩된 기존 컨텐츠
     let prevCont;
+    let prevLen;
+    let curLen;
     function mousewheelEvent() {
         if ((window.scrollY + window.innerHeight)/document.body.clientHeight > 0.85) { // 마지막까지 스크롤 했을 때.
         	// 이벤트 지워준다.
         	$('body').off('mousewheel');
         	// 이미 로딩된 기존 컨텐츠의 html 객체 저장.
     		prevCont = $('.myPost').html();
+        	prevLen = $('.p_inf').length;
+        	console.log('before : '+prevLen);
         	// 0.25초 뒤 다음 코드 실행.
         	setTimeout(() => {        		
         		// 게시물 로딩되는 부분 새로 고침.
@@ -276,12 +280,14 @@
         		} else { // 팔로우 한 유저의 최근 게시물을 전부 출력 했을 경우
         			$('#main').load(`newRecomPost?pageNo=\${curRecomPage} .myPost`, function() {
             			// 새로 고침 성공 시 실행.
+            			if ($('.p_inf').length != 0) { // 새로운 게시물이 로딩될 때
+                			// 다음 페이지 시작 번호 갱신.
+                			curRecomPage += 10;
+                			// 제거했던 이벤트 다시 생성.
+                			$('body').on('mousewheel', function() { mousewheelEvent(); });
+            			}
             			// 기존 게시물을 새로 로딩된 게시물 위에 추가.
             			$('.myPost').prepend(prevCont);
-            			// 다음 페이지 시작 번호 갱신.
-            			curRecomPage += 10;
-            			// 제거했던 이벤트 다시 생성.
-            			$('body').on('mousewheel', function() { mousewheelEvent(); });
             		});
         		}
         		// 두 경우 모두에 속하지 않는 경우 스크롤 페이징 중단.

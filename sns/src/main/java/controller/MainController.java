@@ -39,10 +39,13 @@ public class MainController {
 	// 세션 로그인 유저가 팔로우하는 아이디 리스트
 	List<String> followIdList;
 	// 세션 로그인 유저가 팔로우하는 아이디에 대해 출력된 게시물 번호
-	List<Integer> selectedPostNoList = new ArrayList<>();
+	List<Integer> selectedPostNoList;
 
 	@GetMapping("main")
 	public String mint(Model model, HttpSession session) throws Exception {
+		
+		selectedPostNoList = new ArrayList<>();
+		
 		String sessionId = (String)session.getAttribute("userid");
 		// 로그인 유저가 팔로우하는 아이디
 		followIdList = fser.getFollowingsId(sessionId);
@@ -124,6 +127,13 @@ public class MainController {
 		String curId = (String)session.getAttribute("userid");
 		ProfileVO pvo = pser.select(curId);
 		return pvo;
+	}
+	
+	@GetMapping("menu-followings")
+	@ResponseBody
+	public List<ProfileVO> menuFollowings(HttpSession session) throws Exception {
+		String curId = (String)session.getAttribute("userid");
+		return fser.getFollowingsProfile(curId);
 	}
 
 	@GetMapping("myPost")
