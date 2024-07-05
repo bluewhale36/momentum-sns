@@ -49,4 +49,11 @@ public interface IF_ManagerDao {
 	public int getAdminsSearchCount(PageVO pvo) throws Exception;
 	
 //	public int getMemberSearchCount(PageVO pvo) throws Exception;
+	
+	public int getAllMemberCount() throws Exception;
+	
+	public int getTodayReportCount() throws Exception;
+	
+	public int getCurBannedCount() throws Exception;
+	
 }

@@ -28,20 +28,6 @@
                     <li id="settings-profile"><h4>Profile</h4></li>
                 </ol>
                 <li id="settings-display"><h2>Display</h2></li>
-                <label>
-                    <li><h2>Use</h2></li>
-                </label>
-                <ol id="settings-use">
-                    <input type="hidden" value="0">
-                    <li><h4>Alarm</h4></li>
-                    <ol>
-                        <li id="settings-alarm-activity">Activity</li>
-                    </ol>
-                    <li><h4>Post</h4></li>
-                    <ol>
-                        <li id="settings-post-interaction">Interaction</li>
-                    </ol>
-                </ol>
             </ol>
             <button type="button" id="settings-back-btn" class="theme">&lang; BACK</button>
         </div>
@@ -84,7 +70,7 @@
 	$('#settings-menu li[id^="settings"]').on('click', function() {
 	    let pageName = $(this).attr('id').replaceAll('-','_');
 	    $.ajax({
-	    	url: 'settings_load.do',
+	    	url: 'settings-load.do',
 	    	type: 'post',
 	    	data: {
 	    		page : pageName

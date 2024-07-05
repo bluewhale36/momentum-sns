@@ -23,6 +23,11 @@ public class ManagerController {
 	@GetMapping("/manager") 
 	public String managePage(HttpSession session, Model model) throws Exception {
 		model.addAttribute("curId", session.getAttribute("userid"));
+		
+		model.addAttribute("memberCnt", mservice.getAllMemberCount());
+		model.addAttribute("reportCnt", mservice.getTodayReportCount());
+		model.addAttribute("bannedCnt", mservice.getCurBannedCount());
+		
 		return "manageDashboard";
 	}
 	

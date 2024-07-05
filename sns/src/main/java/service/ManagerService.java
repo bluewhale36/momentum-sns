@@ -101,4 +101,21 @@ public class ManagerService implements IF_ManagerService{
 		return mdao.getAdminsSearchCount(pvo);
 	}
 
+	@Override
+	public int getAllMemberCount() throws Exception {
+		return mdao.getAllMemberCount();
+	}
+
+	@Override
+	public int getTodayReportCount() throws Exception {
+		return mdao.getTodayReportCount();
+	}
+
+	@Override
+	public int getCurBannedCount() throws Exception {
+		return mdao.getCurBannedCount();
+	}
+
+
+
 }

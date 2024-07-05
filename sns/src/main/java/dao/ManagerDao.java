@@ -105,4 +105,21 @@ public class ManagerDao implements IF_ManagerDao{
 		return sql.selectOne(mapperQuery+".selectMemberCountWhere", pvo);
 	}
 
+	@Override
+	public int getAllMemberCount() throws Exception {
+		return sql.selectOne(mapperQuery+".selectMemberCount");
+	}
+
+	@Override
+	public int getTodayReportCount() throws Exception {
+		return sql.selectOne(mapperQuery+".selectReportCountWhere");
+	}
+
+	@Override
+	public int getCurBannedCount() throws Exception {
+		return sql.selectOne(mapperQuery+".selectBannedCountWhere");
+	}
+
+
+
 }

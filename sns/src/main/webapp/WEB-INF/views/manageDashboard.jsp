@@ -34,19 +34,19 @@
                 <div class="dashboard-data-summary">
                     <div id="summary-member-cnt" class="go-user-member">
                         <h3>전체 회원 수</h3>
-                        <h2>2000명</h2>
+                        <h2>${memberCnt }명</h2>
                     </div>
                 </div>
                 <div class="dashboard-data-summary">
                     <div id="summary-report-cnt" class="go-report">
                         <h3>오늘 신고 건수</h3>
-                        <h2>500건</h2>
+                        <h2>${reportCnt }건</h2>
                     </div>
                 </div>
                 <div class="dashboard-data-summary">
                     <div id="summary-banned-cnt" class="go-user-banned">
                         <h3>현재 정지 계정</h3>
-                        <h2>15개</h2>
+                        <h2>${bannedCnt }개</h2>
                     </div>
                 </div>
             </div>

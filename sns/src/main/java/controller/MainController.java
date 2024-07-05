@@ -53,16 +53,36 @@ public class MainController {
 		// main에서 나의 게시물도 볼 수 있도록.
 		followIdList.add(sessionId);
 		
-		// 로그인 유저가 팔로우하는 아이디의 게시물의 rownum max값.
-		int maxNum = mser.getCurMaxNum(followIdList);
+		List<PostVO> postList;
+		
+		System.out.println(followIdList);
+		System.out.println(followIdList.size());
+		
+		if (followIdList.size() != 1) { // 팔로우한 계정이 있을 경우
+			System.out.println("there are some followings");
+			// 로그인 유저가 팔로우하는 아이디의 게시물의 rownum max값.
+			int maxNum = mser.getCurMaxNum(followIdList);
+			model.addAttribute("maxNum", maxNum);
+			
+			// Paging을 위한 번호와 where절의 id 저장한 hashmap 사용.
+			HashMap<String, Object> fPostMap = new HashMap<>();
+			fPostMap.put("pageNo", maxNum);
+			fPostMap.put("fList", followIdList);
+			
+			postList = mser.getFollowingPostList(fPostMap);
+		} else { // 팔로우한 계정이 없을 경우
+			System.out.println("theres no followings");
+			model.addAttribute("maxNum", -1);
+			
+			HashMap<String, Object> recomMap = new HashMap<>();
+			recomMap.put("exList", null);
+			recomMap.put("pageNo", 1);
+			
+			postList = mser.getRecommendPostList(recomMap);
+		}
 		
 		
-		// Paging을 위한 번호와 where절의 id 저장한 hashmap 사용.
-		HashMap<String, Object> fPostMap = new HashMap<>();
-		fPostMap.put("pageNo", maxNum);
-		fPostMap.put("fList", followIdList);
 		
-		List<PostVO> postList = mser.getFollowingPostList(fPostMap);
 		for (PostVO pvo : postList) {
 			// 파일 추가
 			pvo.setFilename(mser.getAttach(pvo.getNo()));
@@ -84,8 +104,8 @@ public class MainController {
 		}
 		
 		model.addAttribute("aList", postList);
-		model.addAttribute("profilelist",pser.allprofileList());
-		model.addAttribute("maxNum", maxNum);
+		model.addAttribute("profilelist", pser.allprofileList());
+		
 		return "main";
 	}
 	
@@ -206,11 +226,7 @@ public class MainController {
 	// 팔로우한 유저 게시물 페이징 이후 추천 게시물 페이징
 	@GetMapping("newRecomPost")
 	public String newRecomPost(@RequestParam("pageNo")int pageNo, Model model) throws Exception {
-		
-		for (Integer i : selectedPostNoList) {
-			System.out.print(i+" ");			
-		}
-		System.out.println();
+
 		
 		HashMap<String, Object> recomMap = new HashMap<>();
 		recomMap.put("exList", selectedPostNoList);

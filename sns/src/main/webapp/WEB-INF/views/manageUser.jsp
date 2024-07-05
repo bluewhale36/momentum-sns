@@ -222,9 +222,6 @@
                 <div id="reset">
                 	<button type="button"><a href="/sns/manager/user/">reset</a></button>
                 </div>
-                <div id="export-Excel">
-                    <button type="button">export as Excel</button>
-                </div>
             </div>
 		</form>           
 	</div>
