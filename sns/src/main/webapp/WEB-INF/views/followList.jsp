@@ -47,7 +47,7 @@ pageContext.setAttribute("curId", curId);
 				</tr>
 			</thead>
 			<tbody id="followingsList">
-				<c:if test="${not empty fList && not empty followFlag}">
+				<c:if test="${not empty fList && followFlag ne null }">
 					<c:set var="curIdList" value="${followFlag }" />
 					<c:forEach items="${fList }" var="fProf">
 						<tr>
@@ -201,7 +201,6 @@ pageContext.setAttribute("curId", curId);
 				}
 			});
 		}
-
 	}
 	function followCancel(btn) {
 

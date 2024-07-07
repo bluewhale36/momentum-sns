@@ -23,13 +23,16 @@
             <h2><a href="#">Report Info</a></h2>
         </div>
         <div id="manage-dashboard-container">
-            <div id="dashboard-title">
-                <h1>DashBoard</h1>
+            <div id="dashboard-title-main">
+                <h1>Dashboard</h1>
             </div>
             <div id="dashboard-info">
                 <span id="dashboard-date-span"></span>
                 <span id="dashboard-adminId-span">Admin : ${curId }</span>
-            </div>            
+            </div>
+            <div id="dashboard-title-data">
+                <h2>📌 Data Summary</h2>
+            </div>
             <div id="dashboard-data">
                 <div class="dashboard-data-summary">
                     <div id="summary-member-cnt" class="go-user-member">
@@ -50,17 +53,26 @@
                     </div>
                 </div>
             </div>
+            <div id="dashboard-title-functions">
+                <h2>📌 FUNCTIONS</h2>
+            </div>
+            <div id="dashboard-functions">
+                <button type="button" id="remove-past-searchWord">지난 일자 검색어 삭제</button>
+            </div>
         </div>
     </div>
 </body>
 
 <script>
+	// 접속 시간
     const dt = new Date();
     let dtStr = `\${dt.getFullYear()}-\${dt.getMonth() + 1}-\${dt.getDate()} \${dt.getHours()}:\${dt.getMinutes()}:\${dt.getSeconds()}`
     $(document).ready(function() {
         $('#dashboard-date-span').text(dtStr);
     });
+    // data summary card 클릭 시
     $('div[class^=go-]').on('click', function() {
+    	$(this).css('pointer-events', 'none');
     	let identifier = $(this).attr('class').split(' ')[0].split('-');
     	let stId = identifier[1];
     	if (identifier.length > 1) {
@@ -69,6 +81,22 @@
     	} else {
     		location.href = `/sns/manager/\${stId}/`;
     	}
+    });
+    // 지난 일자 검색어 삭제
+    $('#remove-past-searchWord').on('click', function() {
+    	let btn = $(this);
+    	btn.css('pointer-events', 'none');
+    	$.ajax({
+    		url: '/sns/remove-past-searchword',
+    		type: 'get',
+    		success: function(result) {
+    			alert(`\${dt.getFullYear()}-\${dt.getMonth() + 1}-\${dt.getDate()}일자 이전의 검색어 기록이 삭제되었습니다.\n삭제된 검색어 수 : \${result}`);
+    			btn.css('poitner-events', 'auto');
+    		},
+    		error: function() {
+    			alert('잠시 후 다시 시도해주세요.');
+    		}
+    	});
     });
 </script>
 </html>

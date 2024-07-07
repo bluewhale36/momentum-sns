@@ -69,6 +69,7 @@ public class MainController {
 			fPostMap.put("pageNo", maxNum);
 			fPostMap.put("fList", followIdList);
 			
+			
 			postList = mser.getFollowingPostList(fPostMap);
 		} else { // 팔로우한 계정이 없을 경우
 			System.out.println("theres no followings");
@@ -77,6 +78,7 @@ public class MainController {
 			HashMap<String, Object> recomMap = new HashMap<>();
 			recomMap.put("exList", null);
 			recomMap.put("pageNo", 1);
+			recomMap.put("sessionId", sessionId);
 			
 			postList = mser.getRecommendPostList(recomMap);
 		}
@@ -103,6 +105,7 @@ public class MainController {
 			pvo.setReCnt(reCnt);
 		}
 		
+		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist", pser.allprofileList());
 		
@@ -214,7 +217,7 @@ public class MainController {
 			pvo.setReCnt(reCnt);
 		}
 	
-		
+		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
 		
@@ -225,12 +228,14 @@ public class MainController {
 	
 	// 팔로우한 유저 게시물 페이징 이후 추천 게시물 페이징
 	@GetMapping("newRecomPost")
-	public String newRecomPost(@RequestParam("pageNo")int pageNo, Model model) throws Exception {
+	public String newRecomPost(@RequestParam("pageNo")int pageNo, HttpSession session, Model model) throws Exception {
 
+		String sessionId = (String)session.getAttribute("userid");
 		
 		HashMap<String, Object> recomMap = new HashMap<>();
 		recomMap.put("exList", selectedPostNoList);
 		recomMap.put("pageNo", pageNo);
+		recomMap.put("sessionId", sessionId);
 		
 		List<PostVO> postList = mser.getRecommendPostList(recomMap);
 		for(PostVO pvo : postList) {
@@ -248,11 +253,18 @@ public class MainController {
 			// 해당 글의 리포스트 수
 			pvo.setReCnt(reCnt);
 		}
+		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
 		
 		System.out.println("new recom page is ready");
 		return "main";
+	}
+	
+	// 메뉴 새로고침
+	@GetMapping("menuReload")
+	public String menuReload() {
+		return "menuAll";
 	}
 	
 

@@ -23,7 +23,7 @@
                     <li><h2>Account</h2></li>
                 </label>
                 <ol id="settings-account">
-                    <input type="hidden" value="0">
+                    <input type="hidden" value="1">
                     <li id="settings-member-info"><h4>Member Info</h4></li>
                     <li id="settings-profile"><h4>Profile</h4></li>
                 </ol>
@@ -32,16 +32,12 @@
             <button type="button" id="settings-back-btn" class="theme">&lang; BACK</button>
         </div>
         <div id="settings-cont">
-            this is settings.
+            <%@ include file="./settings_options/settings_profile.jsp"%>
         </div>
     </main>
 </body>
 
 <script>
-
-	$(document).ready(function() {
-	    $('#settings-menu label li > h2').css('color', 'grey');
-	});
 	
 	$('#settings-menu label').on('click', function() {
 	    let cur = $(this).find('h2').text().toLowerCase()

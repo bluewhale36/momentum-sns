@@ -56,4 +56,6 @@ public interface IF_ManagerDao {
 	
 	public int getCurBannedCount() throws Exception;
 	
+	public int removePastSearchWord() throws Exception;
+	
 }

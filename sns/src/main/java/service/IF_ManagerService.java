@@ -54,4 +54,6 @@ public interface IF_ManagerService {
 	
 	public int getCurBannedCount() throws Exception;
 	
+	public int removePastSearchWord() throws Exception;
+	
 }

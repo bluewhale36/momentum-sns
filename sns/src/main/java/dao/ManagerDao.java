@@ -120,6 +120,11 @@ public class ManagerDao implements IF_ManagerDao{
 		return sql.selectOne(mapperQuery+".selectBannedCountWhere");
 	}
 
+	@Override
+	public int removePastSearchWord() throws Exception {
+		return sql.delete(mapperQuery+".deleteKeyWordWhere");
+	}
+
 
 
 }

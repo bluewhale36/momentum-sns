@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import service.IF_ManagerService;
 import vo.ManagerVO;
@@ -20,7 +21,7 @@ public class ManagerController {
 	@Inject
 	IF_ManagerService mservice;
 	
-	@GetMapping("/manager") 
+	@GetMapping("manager") 
 	public String managePage(HttpSession session, Model model) throws Exception {
 		model.addAttribute("curId", session.getAttribute("userid"));
 		
@@ -128,5 +129,11 @@ public class ManagerController {
 		model.addAttribute("cnt", cnt);
 		
 		return "manage"+area;
+	}
+	
+	@GetMapping("remove-past-searchword")
+	@ResponseBody
+	public int removePastSearchWord() throws Exception {
+		return mservice.removePastSearchWord();
 	}
 }

@@ -116,6 +116,11 @@ public class ManagerService implements IF_ManagerService{
 		return mdao.getCurBannedCount();
 	}
 
+	@Override
+	public int removePastSearchWord() throws Exception {
+		return mdao.removePastSearchWord();
+	}
+
 
 
 }

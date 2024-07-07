@@ -214,4 +214,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where sysdate between s_date and f_date
 	</select>
 	
+	<delete id="deleteKeyWordWhere">
+		delete from searchWordTest where keyDate <![CDATA[ < ]]> sysdate
+	</delete>
+	
 </mapper>
