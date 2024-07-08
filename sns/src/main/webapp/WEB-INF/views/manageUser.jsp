@@ -197,6 +197,26 @@
 		                            </c:forEach>
 		                        </tbody>
 	                        </c:when>
+	                        <c:when test="${not empty banned }">
+	                        	<thead>
+	                        		<tr>
+	                        			<th>ID</th>
+	                        			<th>S_DATE</th>
+	                        			<th>F_DATE</th>
+	                        			<th>PERIOD</th>
+                        			</tr>
+                       			</thead>
+                       			<tbody>
+                       				<c:forEach items="${banned }" var="one">
+                       					<tr>
+                       						<td>${one.id }</td>
+                       						<td class="tac">${one.s_date }</td>
+                       						<td class="tac">${one.f_date }</td>
+                       						<td>${one.period }</td>
+                       					</tr>
+                       				</c:forEach>
+                       			</tbody>
+	                        </c:when>
                         </c:choose>
                     </table>
                 </div>
