@@ -9,7 +9,7 @@
     width: 210px;
 }
 
-#userFollowBtn {
+#userFollowBtn button {
     position: absolute;
     left: 82%;
     top: 0;

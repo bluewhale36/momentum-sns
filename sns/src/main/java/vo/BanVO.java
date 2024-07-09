@@ -2,6 +2,7 @@ package vo;
 
 public class BanVO {
 	private String id;
+	private String s_date;
 	private String f_date;
 	private int period;
 	public String getId() {
@@ -22,5 +23,10 @@ public class BanVO {
 	public void setPeriod(int period) {
 		this.period = period;
 	}
-	
+	public String getS_date() {
+		return s_date;
+	}
+	public void setS_date(String s_date) {
+		this.s_date = s_date;
+	}
 }

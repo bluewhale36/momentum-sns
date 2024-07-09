@@ -23,6 +23,7 @@ import service.IF_FollowListService;
 import service.IF_MainService;
 import service.IF_ProfileService;
 import util.FileDataUtil;
+import vo.FollowVO;
 import vo.PostVO;
 import vo.ProfileVO;
 
@@ -105,9 +106,14 @@ public class ProfileController {
 				pvo.setP_love(p_love);
 				pvo.setReCnt(reCnt);
 			}
+			FollowVO fvo = new FollowVO();
+			fvo.setId((String)session.getAttribute("userid"));
+			fvo.setFollowId(id);
+			int followFlag = fServe.chkFollowing(fvo);
 			model.addAttribute("mypostList",mypostList);
 			// 글 쓴 개수
 			model.addAttribute("postlength", mserve.postLength(id));
+			model.addAttribute("followFlag", followFlag);
 			return "userProfile";
 		}
 		

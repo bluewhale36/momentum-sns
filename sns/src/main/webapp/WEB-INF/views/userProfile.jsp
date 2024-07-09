@@ -28,7 +28,14 @@
         </div>
     </div>
     <div id="userFollowBtn">
-        <input type="button" id="userFollow" value="FOLLOW">
+        <c:choose>
+        	<c:when test="${followFlag == 1 }">
+        		<button type="button" value="1" class="theme">FOLLOWING</button>
+        	</c:when>
+        	<c:otherwise>
+        		<button type="button" value="0" class="theme">FOLLOW</button>
+        	</c:otherwise>
+        </c:choose>
     </div>
     <div id="myProfile">
         <div id="myImg">

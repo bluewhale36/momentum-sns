@@ -72,7 +72,7 @@ public class ManagerController {
 		} else if (curType.equals("admin")) {
 			model.addAttribute("users", mservice.getAllAdmins(pvo));
 		} else if (curType.equals("banned")) {
-//			model.addAttribute("users", mservice)
+			model.addAttribute("banned", mservice.getAllBanned(pvo));
 		} else if (curType.equals("comm")) {
 			model.addAttribute("comms", mservice.getAllComms(pvo));
 		} else {
@@ -94,7 +94,7 @@ public class ManagerController {
 			pvo.setPage(1);
 		}
 		int cnt = 0;
-		System.out.println(pvo.toString());
+		System.out.println("controller "+pvo.toString());
 
 		System.out.println(area);
 		if (area.equals("User")) {
@@ -119,7 +119,9 @@ public class ManagerController {
 				pvo.setTotalCount(cnt);
 				model.addAttribute("users", mservice.searchAdmins(pvo));
 			} else if (loc.equals("banned")) {
-//				
+				cnt = mservice.getBannedSearchCount(pvo);
+				pvo.setTotalCount(cnt);
+				model.addAttribute("banned", mservice.searchBanned(pvo));
 			}
 		} else if (area.equals("Report")) {
 			
