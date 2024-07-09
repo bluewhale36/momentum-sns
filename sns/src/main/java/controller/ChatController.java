@@ -1,16 +1,17 @@
 package controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -77,6 +78,7 @@ public class ChatController {
 		String file = upload.fileUpload(chatPhoto)[0];
 		if(file != null) {
 			cVO.setChatImg(file);
+			
 		}
 		if(cVO.getChatName() == null || cVO.getChatName().equals("")) {
 			cVO.setChatName(cVO.getNickName()+"님의 M");
@@ -108,5 +110,44 @@ public class ChatController {
 		model.addAttribute("nickName", nickName);
 		model.addAttribute("chatList", cServe.chatList(nickName));
 		return "chat";
+	}
+	
+	//채팅 프로필 추가
+	@GetMapping("profileList")
+	public String profileList(HttpSession session, Model model) throws Exception {
+		List<ProfileVO> pro = pServe.selectProfile(String.valueOf(session.getAttribute("userid")));
+		model.addAttribute("profile", pro);
+		return "profileList";
+	}
+	
+	//채팅 프로필 수정
+	@GetMapping("profileUpdate")
+	public String profileUpdate(HttpSession session, Model model, HttpServletResponse response) throws Exception {
+		List<ProfileVO> pVO = pServe.selectSub(String.valueOf(session.getAttribute("userid")));
+		if(pVO.size() == 0 || pVO == null) {
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script> alert('수정할 프로필이 존재하지 않습니다.');");
+			out.println("history.go(-1); </script>");
+			out.close();
+		}
+		model.addAttribute("profile", pVO);
+		return "profileUpdate";
+	}
+	
+	@GetMapping("profileDelete")
+	public String profileDelete(HttpSession session, Model model, HttpServletResponse response) throws Exception {
+		List<ProfileVO> pVO = pServe.selectSub(String.valueOf(session.getAttribute("userid")));
+		if(pVO.size() == 0 || pVO == null) {
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script> alert('삭제하실 프로필이 존재하지 않습니다.');");
+			out.println("history.go(-1); </script>");
+			out.close();
+		}
+		model.addAttribute("profile", pVO);
+		return "profileDelete";
 	}
 }

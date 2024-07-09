@@ -10,19 +10,29 @@
 <link id="theme-setting" rel="stylesheet"
 	href="./resources/css/dark_theme.css">
 <link rel="stylesheet" href="./resources/css/chat.css">
+<link rel="stylesheet" href="./resources/css/profileMenu.css">
 </head>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="/sns/resources/JS/setTheme.js"></script>
 <body class="theme">
 	<form id="form">
 		<input type="hidden" value="${nickName}" id="user" name="nickName">
 		<div id="chatAll">
 			<div id="chatMenu" class="chatItem">
-				<ul>
-					<li><a href="main">SNS</a></li>
-					<li>PROFILE</li>
-				</ul>
-			</div>
+            <ul>
+                <li class="proMainMenu"><a href="main">SNS</a></li>
+                <li class="proMainMenu"><a href="selProfile">CHAT</a></li>
+                <li id="profileSub" class="proMainMenu">
+                    <a href="profileList">PROFILE</a>
+                    <ul id="profileSubDiv">
+                        <li class="proSubMenu"><a href="profileList">SHOW</a></li>
+                        <li class="proSubMenu"><a href="profileUpdate">EDIT</a></li>
+                        <li class="proSubMenu"><a href="profileDelete">DELETE</a></li>
+                    </ul>
+                </li>
+            </ul>
+        	</div>
 			<div id="chatUserTitle" class="chatItem">
 				<div id="chatUserHeader">
 					<span>MESSAGE</span>
@@ -35,11 +45,11 @@
 				<table id="chatUserTable">
 					<c:forEach var="chat" items="${chatList}">
 						<tr style="cursor: pointer;" class="chatInfo">
-							<td style="width: 80%;"><span style="font-size: 16px;"
-								class="infoName">${chat.chatName}</span> <input type="hidden"
-								value="${chat.chatNum}" class="infoNum" name="chatNum">
-								<input type="hidden" value="${chat.chatImg}" class="infoImg"
-								name="chatImg"></td>
+							<td style="width: 80%;">
+								<span style="font-size: 16px;" class="infoName">${chat.chatName}</span> 
+								<input type="hidden" value="${chat.chatNum}" class="infoNum" name="chatNum">
+								<input type="hidden" value="${chat.chatImg}" class="infoImg" name="chatImg">
+							</td>
 							<td
 								style="width: 20%; font-size: 20px; text-align: center; color: #ff00bf;">
 								<span style="display: none; color: #ff00bf;" class="userSel">
@@ -72,6 +82,7 @@
 			</div>
 			<div id="nowUserInfo" class="chatItem">
 				<span id="nowUserName"></span>
+				<input type="hidden" id="nowUserChat">
 			</div>
 			<div id="chatSetting" class="chatItem">
 				<div id="chatSet">
@@ -136,7 +147,10 @@
 					</div>
 				</div>
 			</div>
-			<div id="chatCover" class="chatItem theme">
+			<div id="imgDiv">
+				<img id="bigImg">
+			</div>
+			<div id="chatCover" class="theme">
 				<div id="chatCoverDiv"><span>M</span></div>
             </div>
 		</div>
@@ -151,9 +165,6 @@
 			<div id="chatImgList"></div>
 		</div>
 	</form>
-	<div id="imgDiv">
-		<img id="bigImg">
-	</div>
 </body>
 <script>
 	let chatNum;
@@ -165,6 +176,7 @@
         $('#chatFollow').css("background-color", color)
         $('#chatFollowerBtn').css("background-color", color)
         $('#chatFollowingBtn').css("background-color", color)
+        $('.proMainMenu').eq(1).css('color', '#ff00bf');
     };
 
     //follow div 띄우기
@@ -316,6 +328,7 @@
     	$('.userSel').css("display","none")
     	$('.userSel').eq(chatIndex).css("display", "block");
     	$('#nowUserName').text($('.infoName').eq(chatIndex).text())
+    	$('#nowUserChat').val($('.infoNum').eq(chatIndex).val())
     	if(img != null && img.trim() != "") {
     		$('#nowUserImg').attr('src', "download?filename="+img)
     	} else {
@@ -327,6 +340,7 @@
     //채팅 초기화
     function resetChat() {
     	$('#nowChatting').empty();
+    	$('#chatImgList').empty();
     	$('#chattingText').val("");
     	$('#chatAttachBox').css("display", "none");
     	dataSave.items.clear();
@@ -384,9 +398,9 @@
     	$('.userInfo').eq(index).css('display', 'table');
     	for(let i = 0; i < users.length; i++) {
     		if(users[i].nickName == $('#user').val()) {
-    			$('.userListDiv').eq(index).append("<span style='font-size: 15px; color: #ff00bf;'>"+users[i].nickName+" (M)</span>");
+    			$('.userListDiv').eq(index).append("<span style='font-size: 15px; margin-left: 5%;'>"+users[i].nickName+"</span>");
     		} else {
-    			$('.userListDiv').eq(index).append("<span style='font-size: 15px;'>"+users[i].nickName+"</span>");
+    			$('.userListDiv').eq(index).append("<span style='font-size: 15px; margin-left: 5%;'>"+users[i].nickName+"</span>");
     		}
     	}   	
     }
@@ -417,11 +431,21 @@
                     for (let j = 0; j < usersProfile.length; j++) {
                         if (chatCont[i].nickName == usersProfile[j].nickName) {
                             if (usersProfile[j].photo != null) {
-                                $('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[j].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'>" + chatCont[i].cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
-                                break;
+                            	if(chatCont[i].cont != null && chatCont[i].cont.trim() != "") {
+                            		$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[j].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'>" + chatCont[i].cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+                                    break;
+                            	} else {
+                            		$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[j].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'><img src=download?filename=" + chatCont[i].chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+                                    break;
+                            	}
                             } else {
-                                $('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'>" + chatCont[i].cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
-                                break;
+                            	if(chatCont[i].cont != null && chatCont[i].cont.trim() != "") {
+                            		$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'>" + chatCont[i].cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+                                    break;
+                            	} else {
+                            		$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[j].nickName + "</div><div class='userChat'><img src=download?filename=" + chatCont[i].chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+                                    break;
+                            	}
                             }
                         }
                     }
@@ -433,7 +457,7 @@
     
     //이미지 크게보기
     $('#nowChatting').on('click', '.chattingImg', function() {
-    	$('#imgDiv').css('display', 'block');
+    	$('#imgDiv').css('display', 'flex');
     	$('#bigImg').attr('src', $(this).attr('src'));
     })
     
@@ -445,6 +469,7 @@
     //채팅방 검색
     $('#chatSearch').keydown(function(e) {
     	if (e.keyCode == 13) {
+    		$('.userInfo').css('display', 'none')
     		let searWord = $('.infoName')
     		if($('#chatSearch').val().trim != "") {
     			$('.chatInfo').css('display', 'none')
@@ -458,6 +483,11 @@
     			$('.chatInfo').css('display', 'table')
     		}
     	}
+    })
+    
+    //보관함으로 이동
+    $('#storageIcon').click(function() {
+    	location.href = "chatImg?chatName="+$('#nowUserName').text()+"&chatNum="+$('#nowUserChat').val();
     })
 </script>
 </html>

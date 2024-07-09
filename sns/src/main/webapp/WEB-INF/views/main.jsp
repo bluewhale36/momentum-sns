@@ -32,149 +32,217 @@ pageContext.setAttribute("curId", curId);
 			<%@ include file="menuAll.jsp"%>
 		</div>
 		<div id="main">
-			<div class="myPost">
-				<c:forEach items="${aList}" var="mp">
-					<c:set var="filenameLength" value="${fn:length(mp.filename)}" />
-					<div class="p_inf">
-						<a href="userprofile?id=${mp.id}" class="userprofilealink">
-							<div class="proimg">
-								<img class="profileImg" src="./resources/img/프로필.png">
-								<c:forEach items="${profilelist }" var="pr">
-									<c:if test="${mp.id eq pr.id }">
-										<img class="profileImg" src="download?filename=${pr.photo }">
-									</c:if>
-								</c:forEach>
-							</div> <span class="p_id">${mp.id }</span>
-						</a> <span class="p_date">${mp.p_date} </span>
-						
-						<!-- 해당 게시물 게시 유저를 내가 팔로우 하고 있는 지 여부 true, false -->
-						<c:if test="${mp.id ne curId}">
-							<c:set var="containFlag" value="${fn:contains(fList, mp.id) }" />
-							<c:choose>
-								<c:when test="${containFlag == true }">
-									<button type="button" class="theme main-po-follow-btn" value="1">FOLLOWING</button>
-								</c:when>
-								<c:otherwise>
-									<button type="button" class="theme main-po-follow-btn" value="0">FOLLOW</button>
-								</c:otherwise>
-							</c:choose>
-						</c:if>
-					</div>
-	
-					<a href="myPost?no=${mp.no}" style="cursor: pointer;" class="p_alink" onclick="p_show(${mp.no})"> <!-- 프로필 아이디 -->
-						<div class="p_cont theme">${mp.cont }</div> <c:choose>
-							<c:when test="${filenameLength eq 0}">
-								<div class="p_files" style="display: none">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<div class="item">
-											<img src="download?filename=${status.current}">
-										</div>
-									</c:forEach>
-								</div>
-							</c:when>
-							<c:when test="${filenameLength eq 1}">
-								<div class="p_files">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<div class="item">
-											<img src="download?filename=${status.current}">
-										</div>
-									</c:forEach>
-								</div>
-							</c:when>
-							<c:when test="${filenameLength eq 2}">
-								<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<div class="item" style="">
-											<img src="download?filename=${status.current}">
-										</div>
-									</c:forEach>
-								</div>
-							</c:when>
-							<c:when test="${filenameLength eq 3}">
-								<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<c:choose>
-											<c:when test="${status.index eq 0}">
-												<div class="item" style="grid-row: 1/3">
-													<img src="download?filename=${status.current}">
-												</div>
-											</c:when>
-											<c:otherwise>
-												<div class="item">
-													<img src="download?filename=${status.current}">
-												</div>
-											</c:otherwise>
-										</c:choose>
-	
-									</c:forEach>
-								</div>
-							</c:when>
-							<c:when test="${filenameLength eq 4}">
-								<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<div class="item">
-											<img src="download?filename=${status.current}">
-										</div>
-									</c:forEach>
-								</div>
-							</c:when>
-							<c:when test="${filenameLength eq 5}">
-								<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
-									<c:forEach items="${mp.filename }" var="file" varStatus="status">
-										<c:choose>
-											<c:when test="${status.index eq 3}">
-												<div class="item">
-													<img src="download?filename=${status.current}">
-													<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#ff00bf" class="bi bi-plus-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" /> <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" /> </svg>
-												</div>
-											</c:when>
-											<c:when test="${status.index eq 4}">
-											</c:when>
-											<c:otherwise>
-												<div class="item">
-													<img src="download?filename=${status.current}">
-												</div>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-								</div>
-							</c:when>
-						</c:choose>
+		<div class="myPost">
+			<c:forEach items="${aList}" var="mp">
+				<c:set var="filenameLength" value="${fn:length(mp.filename)}" />
+				<div class="p_inf">
+				<input type = "hidden" value="${mp.id }">
+					<a href="userprofile?id=${mp.id}" class="userprofilealink">
+						<div class="proimg">
+							<img class="profileImg" src="./resources/img/프로필.png">
+							<c:forEach items="${profileimglist }" var="pr">
+								<c:if test="${mp.id eq pr.id }">
+									<img class="profileImg" src="download?filename=${pr.photo }">
+								</c:if>
+							</c:forEach>
+						</div> 
 					</a>
-	
-					<input type="hidden" value="0" class="p_lovehid${mp.no}">
-					<input type="hidden" value="${mp.no}" id="p_lovehid${mp.no}">
-					<div class="mpfooter theme">
-						<div>
-							<button type="button" class="p_lovebut${mp.no } theme" onclick="p_love(${mp.no })">
-								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" /> </svg>
-							</button>
-							<span class="footspan p_lovecnt${mp.no}">${mp.p_love}</span>
-						</div>
-						<div>
-							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16"> <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2" /> </svg>
-							<span class="footspan">${mp.commCnt}</span>
-						</div>
-						<div>
-							<button type="button" class="p_repostbut${mp.no } theme" onclick="repost(${mp.no})">
-								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16"> <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" /> </svg>
-							</button>
-							<span class="footspan">${mp.reCnt}</span>
-						</div>
-						<div>
-							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16"> <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" /> <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" /> </svg>
-							<span class="footspan">${mp.show}</span>
-						</div>
+						<c:forEach items="${profilelist }" var="ap">
+							<c:if test="${mp.id eq ap.id}">
+								<span class="p_id">${ap.nickName }</span>
+							</c:if>
+						</c:forEach>
+					<span class="p_date">${mp.p_date} </span>
+					<!-- 해당 게시물 게시 유저를 내가 팔로우 하고 있는 지 여부 true, false -->
+					<c:if test="${mp.id ne curId}">
+						<c:set var="containFlag" value="${fn:contains(fList, mp.id) }" />
+						<c:if test="${containFlag == false }">
+							<button type="button" class="theme main-po-follow-btn" value="0">FOLLOW</button>
+						</c:if>
+					</c:if>
+				</div>
+
+				<a href="myPost?no=${mp.no}" style="cursor: pointer;" class="p_alink" onclick="p_show(${mp.no})"> <!-- 프로필 아이디 -->
+					<div class="p_cont theme">${mp.cont }</div> <c:choose>
+						<c:when test="${filenameLength eq 0}">
+							<div class="p_files" style="display: none">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 1}">
+							<div class="p_files">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 2}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item" style="">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 3}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<c:choose>
+										<c:when test="${status.index eq 0}">
+											<div class="item" style="grid-row: 1/3">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="item">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:otherwise>
+									</c:choose>
+
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 4}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 5}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<c:choose>
+										<c:when test="${status.index eq 3}">
+											<div class="item">
+												<img src="download?filename=${status.current}">
+												<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#ff00bf" class="bi bi-plus-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" /> <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" /> </svg>
+											</div>
+										</c:when>
+										<c:when test="${status.index eq 4}">
+										</c:when>
+										<c:otherwise>
+											<div class="item">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</div>
+						</c:when>
+					</c:choose>
+				</a>
+								
+				<c:if test="${mp.re_no != 0 }">
+					<div class="repost-container theme">
+						<input type="hidden" value="${mp.re_no }">
+						<c:set var="repFlag" value="false" />
+						<c:forEach items="${repList }" var="repost">
+							<c:if test="${not repFlag }">
+								<c:if test="${repost.no == mp.re_no }">
+									<c:set var="repFlag" value="true" />
+									<div class="repost-attach-div">
+										<c:if test="${not empty repost.filename}">
+											<div class="repost-attach-img-div">
+												<img src="download?filename=${repost.filename[0] }">
+											</div>
+										</c:if>
+									</div>					
+									<div class="repost-profile-div">
+										<c:set var="flag" value="false" />
+										<c:forEach items="${reproList }" var="reprof">
+											<c:if test="${not flag }">
+												<c:if test="${repost.id eq reprof.id }">
+													<div class="repost-profile-img-div">
+														<c:choose>
+															<c:when test="${not empty reprof.photo }">
+																<img src="download?filename=${reprof.photo }">
+															</c:when>
+															<c:otherwise>
+																<img src="/sns/resources/img/프로필.png">
+															</c:otherwise>
+														</c:choose>
+													</div>
+													<div class="repost-names-div">
+														<input type="hidden" value="${reprof.id }">
+														<span class="repost-nickname-span">${reprof.nickName }</span>
+													</div>																							
+													<c:set var="flag" value="true" /> 
+												</c:if>
+											</c:if>
+										</c:forEach>
+									</div>
+									<div class="repost-cont-div">
+										<span class="repost-cont-span">
+											${repost.cont }
+										</span>
+									</div>
+								</c:if>
+							</c:if>
+						</c:forEach>
 					</div>
-				</c:forEach>
-			</div>
+				</c:if>
+
+				<input type="hidden" value="0" class="p_lovehid${mp.no}">
+				<input type="hidden" value="${mp.no}" id="p_lovehid${mp.no}">
+				<div class="mpfooter theme">
+					<div>
+						<button type="button" class="p_lovebut${mp.no } theme" onclick="p_love(${mp.no })">
+							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" /> </svg>
+						</button>
+						<span class="footspan p_lovecnt${mp.no}">${mp.p_love}</span>
+					</div>
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16"> <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2" /> </svg>
+						<span class="footspan">${mp.commCnt}</span>
+					</div>
+					<div>
+						<button type="button" class="p_repostbut theme" onclick="repost(${mp.no})">
+							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16"> <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" /> </svg>
+							<span class="footspan">${mp.reCnt}</span>
+						</button>
+					</div>
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16"> <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" /> <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" /> </svg>
+						<span class="footspan">${mp.show}</span>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+
+
+
+
+		<div class="footer"></div>
 		</div>
 	</div>
 </body>
 <script>
+
+	$('body').on('click', '.repost-attach-div, .repost-cont-div', function() {
+		let no = $(this).closest('.repost-container').find('input[type="hidden"]').val();
+		location.href = `/sns/myPost?no=\${no}`;
+	});
+	
+	$('body').on('click', '.repost-profile-div', function() {
+		let id = $(this).find('input[type="hidden"]').val();
+		location.href = `/sns/userprofile?id=\${id}`;
+	});
+	
+
+
 	$(document).ready(function(){
 		setting();
-		console.log('no : ${aList[0].no}');
 	})
 	// 좋아요 누른거 확인
 	function setting() {
@@ -224,10 +292,7 @@ pageContext.setAttribute("curId", curId);
 		$.ajax({
 			type:"POST",
 			url:"p_love",
-			data: {"no" : no},
-			success:function() {
-				alert("성공")
-			}
+			data: {"no" : no}
 		})
 	}
 	// 좋아요 취소 ajax
@@ -235,10 +300,7 @@ pageContext.setAttribute("curId", curId);
 		$.ajax({
 			type:"POST",
 			url:"p_loveCancel",
-			data: {"no" : no},
-			success:function() {
-				alert("성공")
-			}
+			data: {"no" : no}
 		})
 	}
 	
@@ -324,8 +386,9 @@ pageContext.setAttribute("curId", curId);
 		btn.val(1);
 		btn.text('FOLLOWING');
 
-		// 추후 수정 필요.
-		let fId = $.trim(btn.closest('.p_inf').find('.p_id').text());
+		
+		let fId = $.trim(btn.prevAll('input[type="hidden"]').val());
+		console.log(fId);
 		
 		$.ajax({
 			url : '/sns/follow',
@@ -359,9 +422,10 @@ pageContext.setAttribute("curId", curId);
 		btn.val(0);
 		btn.text('FOLLOW');
 		
-		// 추후 수정 필요.
-		let fId = $.trim(btn.closest('.p_inf').find('.p_id').text());
-
+		
+		let fId = $.trim(btn.prevAll('input[type="hidden"]').val());
+		console.log(fId);
+		
 		$.ajax({
 			url : '/sns/followcancel',
 			type : 'get',
@@ -385,7 +449,7 @@ pageContext.setAttribute("curId", curId);
 		let allPosts = $('.p_inf');
 		let pId;
 		$.each(allPosts, function(idx) {
-			pId = $.trim(allPosts.eq(idx).find('.p_id').text());
+			pId = $.trim(allPosts.eq(idx).find('input[type="hidden"]').val());
 			if (pId == fId) {
 				let curBtn = allPosts.eq(idx).find('.main-po-follow-btn')
 				if (btnVal == 0) { // 팔로우 취소 한 뒤

@@ -84,6 +84,7 @@ public class MainController {
 		}
 		
 		
+		List<PostVO> rePostList = new ArrayList<>();
 		
 		for (PostVO pvo : postList) {
 			// 파일 추가
@@ -91,6 +92,16 @@ public class MainController {
 			// 현재 출력 된 게시물 번호 미리 저장. 추후 추천 게시물에서는 출력되지 않도록 하기 위함.
 			selectedPostNoList.add((Integer)pvo.getNo());
 			System.out.println(pvo.toString());
+			if (pvo.getRe_no() != 0) {
+				rePostList.add(mser.takePostVO(pvo.getRe_no()));
+			}
+		}
+		System.out.println("repost");
+		List<ProfileVO> reProfList = new ArrayList<>();
+		for (PostVO repvo : rePostList) {
+			repvo.setFilename(mser.getAttach(repvo.getNo()));
+			reProfList.add(pser.select(repvo.getId()));
+			System.out.println(repvo.toString());
 		}
 		
 		for(PostVO pvo : postList) {
@@ -104,10 +115,15 @@ public class MainController {
 			// 해당 글의 리포스트 수
 			pvo.setReCnt(reCnt);
 		}
+
+		model.addAttribute("profilelist",pser.allprofileList());
+		model.addAttribute("profileimglist",pser.profileimgList());
 		
 		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
-		model.addAttribute("profilelist", pser.allprofileList());
+		
+		model.addAttribute("repList", rePostList);
+		model.addAttribute("reproList", reProfList);
 		
 		return "main";
 	}
@@ -169,6 +185,12 @@ public class MainController {
 		
 		//클릭한 게시물
 		PostVO pvo = mser.takePostVO(no);
+		int ccnt = mser.takeCommCnt(pvo.getNo());
+		int p_love = mser.takeP_loveCnt(pvo.getNo());
+		int reCnt = mser.takeReCnt(pvo.getNo());
+		pvo.setCommCnt(ccnt);
+		pvo.setP_love(p_love);
+		pvo.setReCnt(reCnt);
 		pvo.setFilename(mser.getAttach(no));
 		//게시물 작성자
 		ProfileVO proVO = pser.select(pvo.getId());
@@ -197,6 +219,7 @@ public class MainController {
 		fPostMap.put("fList", followIdList);
 		
 		List<PostVO> postList = mser.getFollowingPostList(fPostMap);
+		List<PostVO> rePostList = new ArrayList<>();
 		System.out.println("followingPost");
 		for (PostVO pvo : postList) {
 			// 파일 선택
@@ -204,6 +227,16 @@ public class MainController {
 			// 현재 출력 된 게시물 번호 미리 저장. 추후 추천 게시물에서는 출력되지 않도록 하기 위함.
 			selectedPostNoList.add((Integer)pvo.getNo());
 			System.out.println(pvo.toString());
+			if (pvo.getRe_no() != 0) {
+				rePostList.add(mser.takePostVO(pvo.getRe_no()));
+			}
+		}
+		System.out.println("repost");
+		List<ProfileVO> reProfList = new ArrayList<>();
+		for (PostVO repvo : rePostList) {
+			repvo.setFilename(mser.getAttach(repvo.getNo()));
+			reProfList.add(pser.select(repvo.getId()));
+			System.out.println(repvo.toString());
 		}
 		for(PostVO pvo : postList) {
 			int ccnt = mser.takeCommCnt(pvo.getNo());
@@ -220,6 +253,9 @@ public class MainController {
 		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
+		model.addAttribute("profileimglist",pser.profileimgList());
+		model.addAttribute("repList", rePostList);
+		model.addAttribute("reproList", reProfList);
 		
 		
 		System.out.println("new following page is ready");
@@ -232,15 +268,28 @@ public class MainController {
 
 		String sessionId = (String)session.getAttribute("userid");
 		
+		followIdList = fser.getFollowingsId(sessionId);
+		
 		HashMap<String, Object> recomMap = new HashMap<>();
 		recomMap.put("exList", selectedPostNoList);
 		recomMap.put("pageNo", pageNo);
 		recomMap.put("sessionId", sessionId);
 		
 		List<PostVO> postList = mser.getRecommendPostList(recomMap);
+		List<PostVO> rePostList = new ArrayList<>();
 		for(PostVO pvo : postList) {
 			pvo.setFilename(mser.getAttach(pvo.getNo()));
 			System.out.println(pvo.toString());
+			if (pvo.getRe_no() != 0) {
+				rePostList.add(mser.takePostVO(pvo.getRe_no()));
+			}
+		}
+		System.out.println("repost");
+		List<ProfileVO> reProfList = new ArrayList<>();
+		for (PostVO repvo : rePostList) {
+			repvo.setFilename(mser.getAttach(repvo.getNo()));
+			reProfList.add(pser.select(repvo.getId()));
+			System.out.println(repvo.toString());
 		}
 		for(PostVO pvo : postList) {
 			int ccnt = mser.takeCommCnt(pvo.getNo());
@@ -256,6 +305,9 @@ public class MainController {
 		model.addAttribute("fList", followIdList);
 		model.addAttribute("aList", postList);
 		model.addAttribute("profilelist",pser.allprofileList());
+		model.addAttribute("profileimglist",pser.profileimgList());
+		model.addAttribute("repList", rePostList);
+		model.addAttribute("reproList", reProfList);
 		
 		System.out.println("new recom page is ready");
 		return "main";

@@ -139,10 +139,6 @@ body {
 #nowChat tr, #chatUser tr {
     display: table;
     width: 100%;
-    margin-bottom: 15px;
-}
-
-#chatUser tr {
     margin-bottom: 10px;
 }
 
@@ -336,6 +332,7 @@ input::-webkit-search-results-decoration{
 
 .chatting {
     margin-right: 1%;
+    margin-top: 15px;
 }
 
 #chattingInput {
@@ -467,27 +464,6 @@ input::-webkit-search-results-decoration{
     height: 100%;
 }
 
-#chatMenu ul{
-    margin: auto;
-    width: 90%;
-    padding-left: 0px;
-    height: 100%;
-}
-
-#chatMenu li {
-    margin-bottom: 5%;
-    margin-top: 5%;
-    list-style: none;
-    display: block;
-    color: #00f7ff;
-    font-size: 30px;
-}
-
-#chatMenu a {
-    text-decoration: none;
-    color: inherit;
-}
-
 #chatSetting {
     position: relative;
 }
@@ -542,26 +518,22 @@ input::-webkit-search-results-decoration{
     margin-top: -3%;
 }
 
-.chatItem:nth-child(10) {
+#chatCover {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     grid-column: 3 / 6;
     grid-row: 1 / 4;
-    z-index: 5;
+    z-index: 10;
     border: 1px solid #00f7ff;
 }
 
-#chatCover {
-    text-align: center;
-	position: relative;
-}
-
 #chatCoverDiv {
-	position: absolute;
 	width: 200px;
 	height: 200px;
-	top: 50%;
-	margin-top: -100px;
-	left: 50%;
-	margin-left: -100px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #chatCover span {
@@ -578,19 +550,21 @@ input::-webkit-search-results-decoration{
 }
 
 #imgDiv {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    top: 50%;
-    left: 50%;
-    margin-top: -300px;
-    margin-left: -300px;
+    grid-column: 2 / 6;
+    grid-row: 1 / 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     display: none;
+    z-index: 5;
 }
 
 #bigImg {
-	max-width: 100%;
-	height: auto;
+	margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: auto;
+    border: 3px solid #ff00bf;
 }
 
 .userListDiv {
@@ -598,4 +572,5 @@ input::-webkit-search-results-decoration{
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	font-size: 12px;
 }
