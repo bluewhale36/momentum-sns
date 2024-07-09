@@ -1,5 +1,8 @@
 package dao;
 
+import java.util.List;
+import java.util.Map;
+
 import vo.ProfileVO;
 
 public interface IF_ProfileDao {
@@ -8,4 +11,16 @@ public interface IF_ProfileDao {
 	public ProfileVO select(String id) throws Exception;
 	public void update(ProfileVO pVO) throws Exception;
 	public String matchId(String id) throws Exception;
+	public List<ProfileVO> selectProfile(String id) throws Exception;
+	public List<ProfileVO> profileList(List<String> nick) throws Exception;
+	// 모든 프로필 리스트 가져오기
+	public List<ProfileVO> allprofileList() throws Exception;
+	// 이미지가 있는 프로필 리스트 가져오기
+	List<ProfileVO> profileimgList() throws Exception;
+	public List<ProfileVO> searchProfile(List<String> id) throws Exception;
+	public List<ProfileVO> searchUser(Map map) throws Exception;
+	public void insertProfile(ProfileVO pVO) throws Exception;
+	public List<ProfileVO> selectSub(String id) throws Exception;
+	public void edit(Map map) throws Exception;
+	public void profileDel(String nickName) throws Exception;
 }

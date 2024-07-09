@@ -1,9 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="true" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="true"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <% request.setCharacterEncoding("UTF-8");
+String curId = (String)session.getAttribute("userid");
+// JSTL에서 세션 아이디 사용 할 수 있도록 하는 코드.
+pageContext.setAttribute("curId", curId);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -11,13 +14,11 @@
 <html lang="kor">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
 </script>
 
 
@@ -25,183 +26,442 @@
 <link rel="stylesheet" href="./resources/css/main.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<body class="theme">
-    <div id="all">
-        <div id="menuall">
-            <%@ include file="menuAll.jsp"%>
-        </div>
-        <div id="main">
-            <main>
-                <h1 class="theme-font">
-                <c:if test="${userid != null }">
-					<span> 사용자 정보 : ${userid } / ${username } / ${grade }</span>
-				</c:if>
-                </h1>
-                <div class="theme-font" id="root">
-                <!-- root class에 게시물 들어옵니다 -->
-	                <c:forEach items="${aList}" var="post" varStatus="postStat">
-		                <div class="postS"  style="border:1px solid violet; display:none;">
-		                 <input type="text" name="id" value="${post.id}" class="id cssid" >
-		                 	<div id="carouselExample${postStat.count }" class="carousel slide num${postStat.count }" >
-								<div class="carousel-inner">
-								    <c:forEach items="${post.filename }" var="file" varStatus="status">
-								    	<c:if test="${status.index == 0 }">
-								    		<div class="carousel-item active">
-										    	<img src="download?filename=${status.current}" class="d-block w-100" alt="...">
-										    </div>
-					        			</c:if>
-					        			<c:if test="${status.index >= 1 }">
-								    		<div class="carousel-item">
-										    	<img src="download?filename=${status.current}" class="d-block w-100" alt="...">
-										    </div>
-					        			</c:if>
-						        		<c:if test="${status.last == true && status.index != 0  }">
-						        			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample${postStat.count }" data-bs-slide="prev">
-											    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-											    <span class="visually-hidden">Previous</span>
-										  	</button>
-										  	<button class="carousel-control-next" type="button" data-bs-target="#carouselExample${postStat.count }" data-bs-slide="next">
-											    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-											    <span class="visually-hidden">Next</span>
-									  		</button>
-						        		</c:if>
-				        			</c:forEach>
-								</div>
-							</div>
-				        	<form action = "myPost" method = "post" name="form" class="postCss">
-				        		<input type="hidden" name="no" value="${post.no}" class="no" style="background-color:black;">
-				        		<input type="hidden" name="id" value="${post.id}" class="id cssid" >
-				        		<textarea name="cont" class="cont" style="background-color:black;width:90%;height:200px;border:1px solid violet; color:violet;" readonly>${post.cont}</textarea>
-				        		<div class="likeLine">
-					        		<div class="likeCount">
-										likeCount : 0
-					        		</div>
-					        		<div class="viewCount">	
-										<input type="text" name="show" value="${post.show}" class="showCnt">
-					        		</div>
-				        		</div>
-				        		<input type="hidden" name="privacy" value="${post.privacy}" class="privacy">
-				        		<c:forEach items="${post.filename }" var="file" varStatus="status">
-					        		<input type="hidden" name="filename" value="${status.current}" class="filename">
-				        		</c:forEach>
-				        		<c:if test="${userid != null }">
-				        			<input type="hidden" name="myid" value="${userid}" class="myid" style="margin-top:100px; ">
-				        			<input type="hidden" name="myname" value="${username}" class="myname">
-				        			<input type="hidden" name="mygrade" value="${grade}" class="mygrade">
+<body class="theme theme-scroll">
+	<div id="all">
+		<div id="menuall">
+			<%@ include file="menuAll.jsp"%>
+		</div>
+		<div id="main">
+		<div class="myPost">
+			<c:forEach items="${aList}" var="mp">
+				<c:set var="filenameLength" value="${fn:length(mp.filename)}" />
+				<div class="p_inf">
+				<input type = "hidden" value="${mp.id }">
+					<a href="userprofile?id=${mp.id}" class="userprofilealink">
+						<div class="proimg">
+							<img class="profileImg" src="./resources/img/프로필.png">
+							<c:forEach items="${profileimglist }" var="pr">
+								<c:if test="${mp.id eq pr.id }">
+									<img class="profileImg" src="download?filename=${pr.photo }">
 								</c:if>
-					    	</form>
-					    </div>
-		        	</c:forEach>
-                </div>
-                <!-- 값이 비워져있으나 해당 div를 통해 무한스크롤의 바닥을 감지합니다 지우시면 스크롤시 문제가 발생합니다 -->
-                <div class="footer"></div>
-            </main>
-        </div>
-    </div>
-</body>
+							</c:forEach>
+						</div> 
+					</a>
+						<c:forEach items="${profilelist }" var="ap">
+							<c:if test="${mp.id eq ap.id}">
+								<span class="p_id">${ap.nickName }</span>
+							</c:if>
+						</c:forEach>
+					<span class="p_date">${mp.p_date} </span>
+					<!-- 해당 게시물 게시 유저를 내가 팔로우 하고 있는 지 여부 true, false -->
+					<c:if test="${mp.id ne curId}">
+						<c:set var="containFlag" value="${fn:contains(fList, mp.id) }" />
+						<c:if test="${containFlag == false }">
+							<button type="button" class="theme main-po-follow-btn" value="0">FOLLOW</button>
+						</c:if>
+					</c:if>
+				</div>
 
+				<a href="myPost?no=${mp.no}" style="cursor: pointer;" class="p_alink" onclick="p_show(${mp.no})"> <!-- 프로필 아이디 -->
+					<div class="p_cont theme">${mp.cont }</div> <c:choose>
+						<c:when test="${filenameLength eq 0}">
+							<div class="p_files" style="display: none">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 1}">
+							<div class="p_files">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 2}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item" style="">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 3}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<c:choose>
+										<c:when test="${status.index eq 0}">
+											<div class="item" style="grid-row: 1/3">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="item">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:otherwise>
+									</c:choose>
+
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 4}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<div class="item">
+										<img src="download?filename=${status.current}">
+									</div>
+								</c:forEach>
+							</div>
+						</c:when>
+						<c:when test="${filenameLength eq 5}">
+							<div class="p_files" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr">
+								<c:forEach items="${mp.filename }" var="file" varStatus="status">
+									<c:choose>
+										<c:when test="${status.index eq 3}">
+											<div class="item">
+												<img src="download?filename=${status.current}">
+												<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#ff00bf" class="bi bi-plus-circle" viewBox="0 0 16 16"> <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" /> <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" /> </svg>
+											</div>
+										</c:when>
+										<c:when test="${status.index eq 4}">
+										</c:when>
+										<c:otherwise>
+											<div class="item">
+												<img src="download?filename=${status.current}">
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</div>
+						</c:when>
+					</c:choose>
+				</a>
+								
+				<c:if test="${mp.re_no != 0 }">
+					<div class="repost-container theme">
+						<input type="hidden" value="${mp.re_no }">
+						<c:set var="repFlag" value="false" />
+						<c:forEach items="${repList }" var="repost">
+							<c:if test="${not repFlag }">
+								<c:if test="${repost.no == mp.re_no }">
+									<c:set var="repFlag" value="true" />
+									<div class="repost-attach-div">
+										<c:if test="${not empty repost.filename}">
+											<div class="repost-attach-img-div">
+												<img src="download?filename=${repost.filename[0] }">
+											</div>
+										</c:if>
+									</div>					
+									<div class="repost-profile-div">
+										<c:set var="flag" value="false" />
+										<c:forEach items="${reproList }" var="reprof">
+											<c:if test="${not flag }">
+												<c:if test="${repost.id eq reprof.id }">
+													<div class="repost-profile-img-div">
+														<c:choose>
+															<c:when test="${not empty reprof.photo }">
+																<img src="download?filename=${reprof.photo }">
+															</c:when>
+															<c:otherwise>
+																<img src="/sns/resources/img/프로필.png">
+															</c:otherwise>
+														</c:choose>
+													</div>
+													<div class="repost-names-div">
+														<input type="hidden" value="${reprof.id }">
+														<span class="repost-nickname-span">${reprof.nickName }</span>
+													</div>																							
+													<c:set var="flag" value="true" /> 
+												</c:if>
+											</c:if>
+										</c:forEach>
+									</div>
+									<div class="repost-cont-div">
+										<span class="repost-cont-span">
+											${repost.cont }
+										</span>
+									</div>
+								</c:if>
+							</c:if>
+						</c:forEach>
+					</div>
+				</c:if>
+
+				<input type="hidden" value="0" class="p_lovehid${mp.no}">
+				<input type="hidden" value="${mp.no}" id="p_lovehid${mp.no}">
+				<div class="mpfooter theme">
+					<div>
+						<button type="button" class="p_lovebut${mp.no } theme" onclick="p_love(${mp.no })">
+							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" /> </svg>
+						</button>
+						<span class="footspan p_lovecnt${mp.no}">${mp.p_love}</span>
+					</div>
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-right-dots-fill" viewBox="0 0 16 16"> <path d="M16 2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9.586a1 1 0 0 1 .707.293l2.853 2.853a.5.5 0 0 0 .854-.353zM5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 1 0-2 1 1 0 0 1 0 2" /> </svg>
+						<span class="footspan">${mp.commCnt}</span>
+					</div>
+					<div>
+						<button type="button" class="p_repostbut theme" onclick="repost(${mp.no})">
+							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16"> <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" /> </svg>
+							<span class="footspan">${mp.reCnt}</span>
+						</button>
+					</div>
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16"> <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" /> <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" /> </svg>
+						<span class="footspan">${mp.show}</span>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+
+
+
+
+		<div class="footer"></div>
+		</div>
+	</div>
+</body>
 <script>
 
+	$('body').on('click', '.repost-attach-div, .repost-cont-div', function() {
+		let no = $(this).closest('.repost-container').find('input[type="hidden"]').val();
+		location.href = `/sns/myPost?no=\${no}`;
+	});
 	
-    //infinite scroll -start
-    //첫 로드되는 게시물에 click이벤트 적용
-   	window.onload=function(){
-   		setTimeout(()=>{
-   			var target =document.querySelectorAll(".postLoad");
-   			target.forEach((post)=>post.addEventListener("click", function(e){
-				var form = document.getElementsByName("form")[$(this).index()];
-				$(this).find('form').on('click',()=>{
-					form.submit();
-				});
-			})); 
-   	   	},1000)
-    }
-    
-    const $root = document.querySelector('#root')
-	const $footer = document.querySelector('.footer')
-	// getList = 5개의 게시글을 비동기적으로 불러오는 함수
-	const getList = (count) => {
-	  return new Promise(resolve => {
-		//set Timeout 을 통해 1초후 실행되는 promise를 만듭니다
-		setTimeout(() => {
-	      const data = Array.from({length:5}).map((_,idx)=>{
-	        const no = (count*5)+idx+1
-	        return {no, data: `${no}`}
-	      })
-	      resolve(data)
-	    },1000)
-	  })
-	}
-	//cnt변수는 게시물리스트가 순차적으로 새로운 DOM요소로 들어갈수 있게 인덱스의 역할을 해줌
-	var cnt=0;
-	//renderItem = 하나의 게시글을 DOM요소로 변경하는 함수
-	const renderItem = ({id, data}) => {
-		
-	const div = document.createElement('div')
-	div.className="postLoad"
-		
-	if(document.getElementsByClassName("postS")[cnt]==undefined){
-		//div class="postS"에 저장된 값을 document.getElementsByClassName("postS")[cnt]를 통해 
-		//다음 게시물이 존재하는지 확인한다. undefined값이 나오면 div를 리턴해 바로 화면에 보여준다 예를들어 총 8개의 게시물이 존재할때
-		//첫 5개는 한번에 화면에 보여지고 다시 5개의 게시물을 DOM에 저장하려고 할때 3개의 게시물이 저장된 이후 바로 return해 화면에 보여준다
-    	return div
-    }
-	div.innerHTML = 
-			document.getElementsByClassName("postS")[cnt].innerHTML;
-			$("#carouselExample"+cnt).removeAttr("id");
-			//윗줄 반드시 있어야함.. 비동기 구현을 위해 미리 hidden 으로 숨겨놓은 캐러셀의 아이디를 지워주어야 뒤늦게 만든 캐러셀이 돌아감
-	//div를 return하게 되면 게시물을 5개 불러온 후가 되므로 innerHTML이 된 직후에 cnt값을 ++해줍니다.
-	cnt++;
-			console.log(cnt);
-	return div
+	$('body').on('click', '.repost-profile-div', function() {
+		let id = $(this).find('input[type="hidden"]').val();
+		location.href = `/sns/userprofile?id=\${id}`;
+	});
 	
-	//만약 return div 후에 cnt++를 하면 첫게시물이 5개, 두번째 게시물이 5개, 3번째 게시물이 5개... 인 화면이 만들어집니다.
-	}
-	
-	let count = 0
-	//fetchMore = $footer에 loading을 해준 후 비동기 방식으로 list를 불러온다
-	//async는 항상 promise를 반환합니다 promis가 아닌 값을 반환 하더라도 이행 상태의 promise(resolved promise)로 값을 감싸 
-	//이행된 promise가 반환 되도록 합니다
-	const fetchMore = async () => {
-	  $footer.classList.add("loading");
-	  //await는 promis가 처리될때 까지 기다립니다
-	  const list = await getList(count ++)
-	  
-	  //documentFragment를 이용하여 $root요소 까지 부착한다
-	  const frag = document.createDocumentFragment()
-	  list.forEach(item=> {
-	    frag.appendChild(renderItem(item))
-	  })
-	  $root.appendChild(frag)
-	  //loading표시를 제거해준다
-	  $footer.classList.remove("loading");
-	  
-	  if(count>=1){
-		  var target =document.querySelectorAll(".postLoad");
- 			target.forEach((post)=>post.addEventListener("click", function(e){
-				var form = document.getElementsByName("form")[$(this).index()];
 
-				$(this).find('form').on('click',()=>{
-					form.submit();
-				});
-			})); 
+
+	$(document).ready(function(){
+		setting();
+	})
+	// 좋아요 누른거 확인
+	function setting() {
+		var uid = '<%=(String) session.getAttribute("userid")%>';
+		// 좋아요 누른 댓글 확인 후 아이콘 변경
+		$.ajax({
+			type:"POST",
+			url:"chklove",
+			data: {"id" : uid},
+			dataType : 'json',
+			cache : false,
+			success:function(data) {
+				$.each(data, function(index, no) {
+					console.log(no);
+					if($("#p_lovehid"+no).val() == no ) {
+						$(".p_lovehid"+no).val(1)
+						$(".p_lovebut"+no).html(`<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
+						  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+						</svg>`);	
+					}
+				})
+				},
+		 });
+	}
+	// 게시물 좋아요 누르기
+	function p_love(no) {
+		let lovenum = $(".p_lovecnt"+no).text();
+		if($(".p_lovehid"+no).val()== 0) {
+			$(".p_lovehid"+no).val(1)
+			$(".p_lovebut"+no).html(`<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-heart-fill" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+					</svg>`)
+			$(".p_lovecnt"+no).text(Number(lovenum)+1);	
+			loveAjax(no);
+		}else {
+			$(".p_lovehid"+no).val(0)
+			$(".p_lovecnt"+no).text(Number(lovenum)-1);
+			$(".p_lovebut"+no).html(`<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+					</svg>`)
+					loveCancelAjax(no);
 		}
-	}
-	const onScroll = (e) => {
-		//clientHeight 는 element의 내부 높이.(내부여백인 padding을 포함, 수평 스크롤바의 높이와 경계선 외부margin을 포함하지 않음)
-	  	//scrollTop은 element최상단과 보여지는 컨텐츠와의 거리를 의미합니다(세로스크롤이 없으면 scrollTop은 항상 0)
-		//scrollHeight는 보이지 않는 부분까지 전체의 높이를 나타냅니다.
 		
-		const {clientHeight,scrollTop,scrollHeight} = e.target.scrollingElement;
-		//scroll이 제일 바닥으로 내려온 상태가 되면 clientHeight + scrollTop = scrollHeight 이므로
-	  if (clientHeight + scrollTop === scrollHeight) {
-		 //게시물 5개를 더 불러옵니다
-	    fetchMore()
-	  }
 	}
-	//첫 5개의 게시물은 스크롤 여부와 상관없이 바로 불러옵니다.
-	fetchMore()
-	//window에서 scroll시 onScroll을 작동하게합니다
-	window.addEventListener('scroll',onScroll)
+	// 좋아요 ajax
+	function loveAjax(no) {
+		$.ajax({
+			type:"POST",
+			url:"p_love",
+			data: {"no" : no}
+		})
+	}
+	// 좋아요 취소 ajax
+	function loveCancelAjax(no) {
+		$.ajax({
+			type:"POST",
+			url:"p_loveCancel",
+			data: {"no" : no}
+		})
+	}
+	
+	// 게시물 조회수 +1 
+	function p_show(no) {
+		$.ajax({
+			type:"GET",
+			url:"p_show",
+			data: {"no" : no},
+			cache : false,
+			success:function() {
+				}
+		 })  
+	}
+	function repost(no) {
+		location.href = `/sns/reposting?no=\${no}`;
+	}
+   	
+    
+    // 로그인 유저의 팔로우 유저가 작성한 게시물 중 가장 최신 게시물의 rownum.
+    const maxNum = ${maxNum};
+    // 로그인 유저의 팔로우 유저가 작성한 게시물 다음 페이지 시작 번호.
+    let curFollowPage = maxNum - 10;
+    // 추천 게시물 시작 번호
+    let curRecomPage = 1;
+    // 이미 로딩된 기존 컨텐츠
+    let prevCont;
+	function scrollEventHandler() {
+		if ((window.scrollY + window.innerHeight)/document.body.clientHeight > 0.8) { // 마지막까지 스크롤 했을 때.
+        	// 이벤트 지워준다.
+        	/* $('body').off('mousewheel.paging'); */
+        	document.removeEventListener('scroll', scrollEventHandler);
+        	// 이미 로딩된 기존 컨텐츠의 html 객체 저장.
+    		prevCont = $('.myPost').html();
+        	console.log(curFollowPage);
+        	console.log(maxNum);
+       		// 게시물 로딩되는 부분 새로 고침.
+       		if (curFollowPage > 0 && maxNum != -1) { // 팔로우 한 유저의 최근 게시물이 남아 있거나, 팔로우한 유저가 있을 경우
+       			console.log('followpage loading');
+           		$('#main').load(`newFollowingPost?pageNo=\${curFollowPage} .myPost`, function() {
+           			// 새로 고침 성공 시 실행.
+           			// 기존 게시물을 새로 로딩된 게시물 위에 추가.
+           			$('.myPost').prepend(prevCont);
+           			// 다음 페이지 시작 번호 갱신.
+           			curFollowPage -= 10;
+           			// 제거했던 이벤트 다시 생성.
+           			document.addEventListener('scroll', scrollEventHandler);
+           		});
+       		} else { // 팔로우 한 유저의 최근 게시물을 전부 출력 했거나, 팔로우한 유저가 없을 경우
+       			console.log('recompage loading');
+       			$('#main').load(`newRecomPost?pageNo=\${curRecomPage} .myPost`, function() {
+           			// 새로 고침 성공 시 실행.
+           			console.log($('.p_inf').length);
+           			if ($('.p_inf').length != 0) { // 새로운 게시물이 로딩될 때
+               			// 다음 페이지 시작 번호 갱신.
+               			curRecomPage += 10;
+               			// 제거했던 이벤트 다시 생성.
+               			document.addEventListener('scroll', scrollEventHandler);
+           			}
+           			// 기존 게시물을 새로 로딩된 게시물 위에 추가.
+           			$('.myPost').prepend(prevCont);
+           		});
+       		}
+       		// 두 경우 모두에 속하지 않는 경우 스크롤 페이징 중단.
+        }
+	}
+	document.addEventListener('scroll', scrollEventHandler);
+    
+	// 현재 세션 로그인 아이디. 현 페이지 최상단에 변수 추가.
+	let curId = "${curId}";
+    // 게시자 아이디 옆 follow-following 버튼 클릭 시
+    $('body').on('click', '.main-po-follow-btn', function() {
+    	console.log('clicked')
+    	let btn = $(this);
+    	btn.css('pointer-events', 'none');
+    	if (btn.val() == 0) {
+    		follow(btn);
+    	} else {
+    		followCancel(btn);
+    	}
+    });
+    function follow(btn) {
+		btn.val(1);
+		btn.text('FOLLOWING');
+
+		
+		let fId = $.trim(btn.prevAll('input[type="hidden"]').val());
+		console.log(fId);
+		
+		$.ajax({
+			url : '/sns/follow',
+			type : 'get',
+			data : {
+				'id' : curId,
+				'followId' : fId,
+			},
+			success : function(result) {
+				if (result == 1) { // 팔로우 성공 시
+					btn.css('pointer-events', 'auto');
+					$('#menuall').load('<c:url value="menuReload" />');
+					adjustFollowBtn(btn.val(), fId);
+					return;
+				} else if (result == -1) { // 차단 유저 팔로우 시
+					alert('차단한 유저는 팔로우 할 수 없습니다.\n차단 해제 후 다시 시도해주세요.');
+				} else { // 이 외 오류 발생 시
+					alert('잠시 후 다시 시도해주세요.');
+				}
+				btn.val(0);
+				btn.text('FOLLOW');
+			},
+			error : function() {
+				alert('잠시 후 다시 시도해주세요.');
+				btn.val(0);
+				btn.text('FOLLOW');
+			}
+		});
+	}
+	function followCancel(btn) {
+		btn.val(0);
+		btn.text('FOLLOW');
+		
+		
+		let fId = $.trim(btn.prevAll('input[type="hidden"]').val());
+		console.log(fId);
+		
+		$.ajax({
+			url : '/sns/followcancel',
+			type : 'get',
+			data : {
+				'id' : curId,
+				'followId' : fId
+			},
+			success : function(result) {
+				btn.css('pointer-events', 'auto');
+				$('#menuall').load('<c:url value="menuReload" />');
+				adjustFollowBtn(btn.val(), fId);
+			},
+			error : function() {
+				alert('잠시 후 다시 시도해주세요.');
+				btn.val(1);
+				btn.text('FOLLOWING');
+			}
+		});
+	}
+	function adjustFollowBtn(btnVal, fId) {
+		let allPosts = $('.p_inf');
+		let pId;
+		$.each(allPosts, function(idx) {
+			pId = $.trim(allPosts.eq(idx).find('input[type="hidden"]').val());
+			if (pId == fId) {
+				let curBtn = allPosts.eq(idx).find('.main-po-follow-btn')
+				if (btnVal == 0) { // 팔로우 취소 한 뒤
+					curBtn.val(0);
+					curBtn.text('FOLLOW');
+				} else { // 팔로우 한 뒤
+					curBtn.val(1);
+					curBtn.text('FOLLOWING');
+				}
+			}
+		});
+	}
+
 </script>
 </html>

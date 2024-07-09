@@ -78,7 +78,11 @@ public class LoginController {
 				// 해당 cookie 유효 기간 갱신.
 				cookieUtil.setCookie(res, "curTheme", cookieVal);
 			}
-			
+			if(lservice.chkBan(id) != null) {
+				String temp = lservice.chkBan(id);
+				rt.addFlashAttribute("banmsg", temp);
+				return "redirect:loginpage";
+			}
 			if (mvo.getAdmin() != null) {
 				if (session.getAttribute("userid") != null) {
 					session.removeAttribute("userid");
@@ -101,8 +105,6 @@ public class LoginController {
 				session.setAttribute("userid", mvo.getId());
 				session.setAttribute("username", mvo.getName());
 				session.setAttribute("nickName", pServe.matchId(mvo.getId()));
-				
-				
 				return "redirect:main";
 			}
 		}else {
@@ -122,9 +124,9 @@ public class LoginController {
 	}
 
 	@GetMapping("logout")
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletRequest req, HttpServletResponse res) {
 		session.invalidate();
-		
+		cookieUtil.clearCookie(req, res);
 		return "redirect:/loginpage";
 	}
 
