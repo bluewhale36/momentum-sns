@@ -273,7 +273,6 @@
         // getResultCnt(); // 조회 튜플 개수 갱신
         
         let curList = '${pagevo.searchLoc}';
-        if (curList == 'ban') { curList = 'banned'; }
         $(`div[id$=\${curList}] button`).css('filter', 'invert(100%)');
         $('input[name=searchLoc]').val(curList);
        	let result = searchFlag();
@@ -414,5 +413,11 @@
     }
 
 
+    
+
+
+    $('#export-Excel').on('click', function() {
+    });
+    
 </script>
 </html>

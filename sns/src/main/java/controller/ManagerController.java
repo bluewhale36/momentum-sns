@@ -94,7 +94,7 @@ public class ManagerController {
 			pvo.setPage(1);
 		}
 		int cnt = 0;
-		System.out.println("controller "+pvo.toString());
+		System.out.println(pvo.toString());
 
 		System.out.println(area);
 		if (area.equals("User")) {

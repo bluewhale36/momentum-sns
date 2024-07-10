@@ -26,8 +26,8 @@ public class PageVO {
 	public String toString() {
 		return "PageVO [startNo=" + startNo + ", endNo=" + endNo + ", perPageNum=" + perPageNum + ", page=" + page
 				+ ", totalCount=" + totalCount + ", endPage=" + endPage + ", startPage=" + startPage + ", prev=" + prev
-				+ ", next=" + next + ", \nsearchType=" + searchType + ", searchWord=" + searchWord + ", searchLoc="
-				+ searchLoc + ", stDate=" + stDate + ", ndDate=" + ndDate + "]";
+				+ ", next=" + next + ",\nsearchType=" + searchType + ", searchWord=" + searchWord + ", searchLoc="
+				+ searchLoc + "]";
 	}
 
 	

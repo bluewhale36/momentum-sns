@@ -1,6 +1,5 @@
 package service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import dao.IF_ManagerDao;
 import vo.BanVO;
 import vo.CommVO;
-import vo.ManagerVO;
 import vo.MemberVO;
 import vo.PageVO;
 import vo.PostVO;
@@ -140,7 +138,7 @@ public class ManagerService implements IF_ManagerService{
 	public int removePastSearchWord() throws Exception {
 		return mdao.removePastSearchWord();
 	}
-
+	
 	@Override
 	public List<BanVO> getAllBanned(PageVO pvo) throws Exception {
 		return mdao.getAllBanned(pvo);
@@ -155,6 +153,7 @@ public class ManagerService implements IF_ManagerService{
 	public int getBannedSearchCount(PageVO pvo) throws Exception {
 		return mdao.getBannedSearchCount(pvo);
 	}
+
 
 
 

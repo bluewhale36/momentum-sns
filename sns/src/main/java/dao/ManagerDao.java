@@ -1,6 +1,5 @@
 package dao;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import vo.BanVO;
 import vo.CommVO;
-import vo.ManagerVO;
 import vo.MemberVO;
 import vo.PageVO;
 import vo.PostVO;
@@ -159,7 +157,6 @@ public class ManagerDao implements IF_ManagerDao{
 		System.out.println(pvo);
 		return sql.selectOne(mapperQuery+".selectBannedCountWhere", pvo);
 	}
-
 
 
 }
