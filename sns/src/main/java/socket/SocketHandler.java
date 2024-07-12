@@ -27,9 +27,17 @@ public class SocketHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		System.out.println("성공");
-		System.out.println(session.getAttributes());
-		System.out.println(session.getAttributes().get("userid"));
-		userList.add(session);
+		boolean flag = true;
+		for(WebSocketSession s : userList) {
+			if(s.getAttributes().get("nickName").equals(session.getAttributes().get("nickName"))
+					&& s.getAttributes().get("nowChat").equals(session.getAttributes().get("nowChat"))) {
+				s = session;
+				flag = false;
+			}
+		}
+		if(flag) {
+			userList.add(session);
+		}
 		super.afterConnectionEstablished(session);
 		System.out.println(userList.size());
 	}
@@ -37,24 +45,34 @@ public class SocketHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		System.out.println("보내기 성공");
+		for(WebSocketSession s : userList) {
+			System.out.println(s.getAttributes().get("nowChat"));
+		}
 		System.out.println(message.getPayload());
 		super.handleTextMessage(session, message);
 		ObjectMapper mapper = new ObjectMapper();
-		try {
-			ChatContVO ccVO = mapper.readValue(message.getPayload(), ChatContVO.class);
-			System.out.println(ccVO.getChatNum());
-			System.out.println(ccVO.getChatAttach());
-			System.out.println(ccVO.getNickName());
-			System.out.println(ccVO.getCont());
-			ccServe.insert(ccVO);
-		} catch (JsonProcessingException e) {
-		    e.printStackTrace(); // 예외 메시지 출력
-		} catch (Exception e) {
-		    e.printStackTrace();
+		List<ChatContVO> cList = new ArrayList<>();
+		ChatContVO ccVO = mapper.readValue(message.getPayload(), ChatContVO.class);
+		if(ccVO.getCont() != null && !ccVO.getCont().trim().equals("")) {
+			cList.add(ccServe.insert(ccVO));
 		}
+		if(ccVO.getChatAttach().equals("YES")) {
+			List<ChatContVO> fileList = ccServe.selectAttachList(ccVO);
+			for(ChatContVO c : fileList) {
+				cList.add(c);
+			}
+		}
+		System.out.println("여기까지 성공");
 		for(WebSocketSession s : userList) {
 			if(s.getAttributes().get("nowChat").equals(session.getAttributes().get("nowChat"))) {
-				s.sendMessage(new TextMessage(message.getPayload()));
+				System.out.println("성공");
+				try {
+					for(ChatContVO cc : cList) {
+						s.sendMessage(new TextMessage(mapper.writeValueAsString(cc)));
+					}
+				} catch(Exception e) {
+					System.out.println("socket 오류 : "+e);
+				}
 			}
 		}
 	}
@@ -63,7 +81,7 @@ public class SocketHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		// TODO Auto-generated method stub
 		super.afterConnectionClosed(session, status);
-		System.out.println(userList.size());
+		userList.remove(session);
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
@@ -45,8 +46,11 @@ public class ChatContService implements IF_ChatContService {
 
 	//chatcont table에 insert
 	@Override
-	public void insert(ChatContVO ccVO) throws Exception {
+	public ChatContVO insert(ChatContVO ccVO) throws Exception {
 		ccDao.insert(ccVO);
+		ChatContVO cc = ccDao.selectContOne(ccVO);
+		cc.setChatTime(cc.getChatTime().substring(0, 16));
+		return cc;
 	}
 
 	//chatAttach table에 insert
@@ -91,6 +95,16 @@ public class ChatContService implements IF_ChatContService {
 			}
 		}
 		return null;
+	}
+
+	//채팅 사진을 가져오기 위한 메서드
+	@Override
+	public List<ChatContVO> selectAttachList(ChatContVO ccVO) throws Exception {
+		List<ChatContVO> fileList = ccDao.selectAttachList(ccVO);
+		for(ChatContVO file : fileList) {
+			file.setChatTime(file.getChatTime().substring(0, 16));
+		}
+		return fileList;
 	}
 	
 }

@@ -161,34 +161,49 @@
 	let chatNum;
 	let lastNum;
 	let sock;
+	let lastDay;
 
 	function connect() {
 		sock = new SockJS("chat");
 
 		sock.onmessage = function (e) {
 			const data = JSON.parse(e.data);
-			console.log(data.chatName)
-			let time = "미정"
-			console.log(data);
-			let usersProfile = proAjax(data.chatNum)
-			for (let i = 0; i < usersProfile.length; i++) {
-				if (data.nickName == usersProfile[i].nickName) {
-					if (usersProfile[i].photo != null) {
-						if (data.cont != null && data.cont.trim() != "") {
-							$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[i].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'>" + data.cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
-						} else {
-							$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[i].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
-						}
+			if(chatNum == data.chatNum) {
+				let allDate = data.chatTime.split(' ');
+				let day = allDate[0];
+				let time = allDate[1];
+				let usersProfile = proAjax(data.chatNum)
+				if(day != lastDay) {
+					$('#nowChatting').append("<thead><tr><td colspan='2' class='allDate'><div><hr>" + day + "<hr></div></td></tr></thead>")
+				}
+				lastDay = day;
+				if(data.nickName == $('#user').val()) {
+					if (data.cont != null && data.cont.trim() != "") {
+						$('#nowChatting').append("<tr><td class='chatCont'><div class='chatting myChatting'><div class='chatUserDate myChatDate'><span>" + time + "</span></div><div class='userChat myChat'>" + data.cont + "</div></div></td></tr>");
 					} else {
-						if (data.cont != null && data.cont.trim() != "") {
-							$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'>" + data.cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
-						} else {
-							$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+						$('#nowChatting').append("<tr><td class='chatCont'><div class='chatting myChatting'><div class='chatUserDate myChatDate'><span>" + time + "</span></div><div class='userChat myChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div></div></td></tr>");
+					}
+				} else {
+					for (let i = 0; i < usersProfile.length; i++) {
+						if (data.nickName == usersProfile[i].nickName) {
+							if (usersProfile[i].photo != null) {
+								if (data.cont != null && data.cont.trim() != "") {
+									$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[i].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'>" + data.cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+								} else {
+									$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='download?filename=" + usersProfile[i].photo + "'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+								}
+							} else {
+								if (data.cont != null && data.cont.trim() != "") {
+									$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'>" + data.cont + "</div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+								} else {
+									$('#nowChatting').append("<tr><td class='chatProfile'><div class='chatProfileYou'><img src='./resources/img/프로필.png'></div></td><td class='chatCont'><div class='chatting yourChatting'><div class='userNick'>" + usersProfile[i].nickName + "</div><div class='userChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div><div class='chatUserDate'><span>" + time + "</span></div></div></td></tr>")
+								}
+							}
 						}
 					}
 				}
+				$('#nowChat').scrollTop($('#nowChat')[0].scrollHeight);
 			}
-			$('#nowChat').scrollTop($('#nowChat')[0].scrollHeight)
 		}
 	}
 
@@ -318,45 +333,38 @@
 	//채팅 추가
 	$('#chattingText').keydown(function (e) {
 		if (e.keyCode == 13) {
-			const fileArray = Array.from(file.files);
-			let fileName = "";
-			for (let i = 0; i < fileArray.length; i++) {
-				if (i != fileArray.length - 1) {
-					fileName += fileArray[i].name + "&&"
-				} else {
-					fileName += fileArray[i].name
-				}
-			}
 			text = $('#chattingText').val();
-			let data = {
-				chatNum: chatNum,
-				nickName: $('#user').val(),
-				cont: text,
-				chatAttach: fileName
-			}
-			let time = "미정"
-			if (data.cont != null && data.cont.trim() != "") {
-				$('#nowChatting').append("<tr><td class='chatCont'><div class='chatting myChatting'><div class='chatUserDate myChatDate'><span>" + time + "</span></div><div class='userChat myChat'>" + data.cont + "</div></div></td></tr>");
-			} else {
-				$('#nowChatting').append("<tr><td class='chatCont'><div class='chatting myChatting'><div class='chatUserDate myChatDate'><span>" + time + "</span></div><div class='userChat myChat'><img src=download?filename=" + data.chatAttach + " class='chattingImg'></div></div></td></tr>");
-			}
-			sock.send(JSON.stringify(data));
-			resetChat();
-			/* if ((text != null && text.trim() != "")|| file.files.length != 0) {
-					  const form = $('#form')[0];
-					  const formData = new FormData(form);
-				$.ajax({
-					url: "/sns/chat/chatting",
-					type: "post",
-					enctype: "multipart/form_data",
-					data: formData,
-					async: false,
-					processData: false,
-					contentType: false
-				})
-			}
-			resetChat();
-			contAjax(chatNum); */
+            if ((text != null && text.trim() != "")|| file.files.length != 0) {
+            	const fileArray = Array.from(file.files);
+    			let fileName = "";
+    			if(fileArray.length != 0) {
+    				fileName = "YES"
+    			} else {
+    				fileName = "NO"
+    			}
+    			const form = $('#form')[0];
+               	const formData = new FormData(form);
+    			text = $('#chattingText').val();
+    			let data = {
+    				chatNum: chatNum,
+    				nickName: $('#user').val(),
+    				cont: text,
+    				chatAttach: fileName
+    			}
+    			if(fileName == "YES") {
+    				$.ajax({
+                		url: "/sns/chat/chatting",
+                		type: "post",
+                		enctype: "multipart/form_data",
+                		data: formData,
+                		async: false,
+                		processData: false,
+                    	contentType: false
+                	})
+    			}
+    			sock.send(JSON.stringify(data));
+    			resetChat();	
+            }
 		}
 	})
 
@@ -365,6 +373,8 @@
 	//그룹방 선택 시
 	$('.chatInfo').click(function () {
 		$('#chatCover').css("display", "none");
+		$('#nowChatting').empty();
+		$('#chatImgList').empty();
 		resetChat();
 		chatIndex = $('.chatInfo').index($(this));
 		chatNum = $('.infoNum').eq(chatIndex).val();
@@ -384,8 +394,7 @@
 
 	//채팅 초기화
 	function resetChat() {
-		/* $('#nowChatting').empty();
-		$('#chatImgList').empty(); */
+		$('#chatImgList').empty();
 		$('#chattingText').val("");
 		$('#chatAttachBox').css("display", "none");
 		dataSave.items.clear();
@@ -455,6 +464,8 @@
 	function chatInsert(chatCont, usersProfile, user) {
 		userList(chatIndex, usersProfile);
 		if (chatCont != null && chatCont.length != 0) {
+			const l_date = chatCont[chatCont.length-1].chatTime.split(' ')
+			lastDay = l_date[0];
 			let spDate = chatCont[0].chatTime.split(' ');
 			let firstDate = spDate[0];
 			$('#nowChatting').append("<thead><tr><td colspan='2' class='allDate'><div><hr>" + firstDate + "<hr></div></td></tr></thead>")

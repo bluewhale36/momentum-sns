@@ -95,15 +95,6 @@ pageContext.setAttribute("curId", curId);
 					</c:forEach>
 				</c:if>
 			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4">
-						<button type="button">
-							<a href="/sns/follow-new"><b>Find new Follow</b></a>
-						</button>
-					</td>
-				</tr>
-			</tfoot>
 		</table>
 	</div>
 </body>
@@ -111,7 +102,6 @@ pageContext.setAttribute("curId", curId);
 	
 	const curId = '<%=curId %>';
 	const reqId = '${reqId}';
-	console.log(reqId);
 
 	// 화면 로딩 될 때 식별자에 따라 리스트 다르게 띄운다.
 	$(document).ready(function() {
