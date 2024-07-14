@@ -181,6 +181,9 @@ button[value="1"]:hover, input[type=submit]:hover {
     background-color: black;
     z-index: 3;
 }
+#admin-table table tbody td {
+	height: 50px;
+}
 
 #admin-table table tbody tr:nth-child(odd) {
     background-color: rgb(66, 66, 66);
@@ -357,7 +360,7 @@ input[type="date"] {
     padding: 10px;
 }
 
-// 모달
+/* 모달 */
 .one-post-container {
     display: grid;
     grid-template-columns: 100px 500px 50px;
