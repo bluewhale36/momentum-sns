@@ -27,9 +27,11 @@
 ## 팀원 구성
 <div align="left">
 
-| **장채윤** | **문형욱** | **우승훈** |
-| :------: |  :------: | :------: |
-| [<img src="https://github.com/user-attachments/assets/f9c7b711-ec87-4dbf-b7a1-cbb498976efe" height=150 width=150> <br/> @guncat-02](https://github.com/guncat-02) | [<img src="https://github.com/user-attachments/assets/ea99c1d6-a08a-4edd-8af0-87aec4cf351a" height=150 width=150> <br/> @ssamjagod](https://github.com/ssamjagod) | [<img src="https://github.com/user-attachments/assets/e0c3fb39-9c3e-4844-aeb1-24d1de848db1" height=150 width=150> <br/> @bluewhale36](https://github.com/bluewhale36)
+|팀원명|프로필|담당업무|
+|:---:|:---:|---|
+|[장채윤<br>(팀장)](https://github.com/guncat-02)|<img src="https://github.com/user-attachments/assets/f9c7b711-ec87-4dbf-b7a1-cbb498976efe" height=100 width=100>|회의 진행 및 일정·팀원 관리, 전체 설계 담당<br>RDBMS관리(OracleDB, MariaDB), 테이블 설계, 샘플데이터작성<br>채팅, 검색|
+|[문형욱<br>(팀원)](https://github.com/ssamjagod)|<img src="https://github.com/user-attachments/assets/ea99c1d6-a08a-4edd-8af0-87aec4cf351a" height=100 width=100>|테이블 설계, 샘플데이터작성<br>로그인, 회원 가입, 좋아요 기능, 관리자 기능|
+|[우승훈<br>(팀원)](https://github.com/bluewhale36)|<img src="https://github.com/user-attachments/assets/e0c3fb39-9c3e-4844-aeb1-24d1de848db1" height=100 width=100>|ERD 작성, 테이블 설계, 샘플데이터작성<br>팔로우, 차단, 페이징, 관리자 기능, 설정 화면 기능|
 
 </div>
 
