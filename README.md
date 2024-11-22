@@ -43,39 +43,66 @@
 <br>
 
 ## 개발 환경
-### Environment
 
-<div>
-<img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat&logoColor=white"/>
-<img src="https://img.shields.io/badge/Eclipse IDE-2C2255?style=flat&logo=eclipseide&logoColor=white"/>
-<img src="https://img.shields.io/badge/DBeaver-382923?style=flat&logo=dbeaver&logoColor=white"/>
-<img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white"/>
-<img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white"/>
-<img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=notion&logoColor=white"/>
-<img src="https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white"/>
+<div align="center">
+ <table>
+  <tr>
+   <th>IDE</th>
+   <td>
+    <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=flat&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Eclipse IDE-2C2255?style=flat&logo=eclipseide&logoColor=white"/>
+    <img src="https://img.shields.io/badge/DBeaver-382923?style=flat&logo=dbeaver&logoColor=white"/>
+   </td>
+  </tr>
+  <tr>
+   <th>협업 툴</th>
+   <td>
+    <img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white"/>
+    <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=notion&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white"/>
+   </td>
+  </tr>
+  <tr>
+   <th>DB</th>
+   <td>
+    <img src="https://img.shields.io/badge/Oracle-F80000?style=flat&logo=oracle&logoColor=white"/>
+    <img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=mariadb&logoColor=white"/>
+   </td>
+  </tr>
+  <tr>
+   <th>BACK END</th>
+   <td>
+    <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=spring&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Java-F80000?style=flat&logoColor=white"/>
+    <img src="https://img.shields.io/badge/MyBatis-362929?style=flat"/>
+   </td>
+  </tr>
+  <tr>
+   <th>FRONT END</th>
+   <td>
+    <img src="https://img.shields.io/badge/HTML-E34F26?style=flat&logo=html5&logoColor=white"/>
+    <img src="https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white"/>
+    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
+    <img src="https://img.shields.io/badge/JSP-F80000?style=flat&logoColor=white"/>
+   </td>
+  </tr>
+  <tr>
+   <th>API</th>
+   <td>
+    <img src="https://img.shields.io/badge/Gmail-EA4335?style=flat&logo=gmail&logoColor=white"/>
+   </td>
+  </tr>
+  <tr>
+   <th>DEPLOYMENT</th>
+   <td>
+    <img src="https://img.shields.io/badge/Google Cloud Platform-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
+   </td>
+  </tr>
+ </table>
 </div>
 
-### Development
-
-<div>
-<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=spring&logoColor=white"/>
-<img src="https://img.shields.io/badge/HTML-E34F26?style=flat&logo=html5&logoColor=white"/>
-<img src="https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white"/>
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
-<img src="https://img.shields.io/badge/Java-F80000?style=flat&logoColor=white"/>
-<img src="https://img.shields.io/badge/JSP-F80000?style=flat&logoColor=white"/>
-<img src="https://img.shields.io/badge/Oracle-F80000?style=flat&logo=oracle&logoColor=white"/>
-<img src="https://img.shields.io/badge/MariaDB-003545?style=flat&logo=mariadb&logoColor=white"/>
-<img src="https://img.shields.io/badge/MyBatis-362929?style=flat"/>
-</div>
-
-### API
-
-<div>
-<img src="https://img.shields.io/badge/Gmail-EA4335?style=flat&logo=gmail&logoColor=white"/>
-</div>
-
-<br>
+<br/>
 
 ## 주요 기능
 **팔로우 간의 게시물 공유**
@@ -125,3 +152,31 @@
 <img src="https://github.com/user-attachments/assets/194eefc1-efff-4d16-a649-c27b41da1d5a" width=70%>
 
 <strong>ajax를 이용해 비동기 방식으로 페이징 기능 구현</strong>
+
+<br/>
+
+## 성과
+**MVC2 디자인 패턴 이해**
+- Sping Legacy를 활용하여 MVC2 디자인 패턴을 프로젝트에 적용하였습니다.
+- 다른 개발 언어도 쉽게 적응할 수 있는 능력을 길렀습니다.
+
+<br/>
+
+**협업 능력 향상**
+- 팀 내에서 주어진 업무에 책임감을 가지고, 팀원 간 의사소통 및 협업을 통한 프로젝트를 진행하였습니다.
+- 형상 관리 도구를 이용하여 프로젝트 파일의 형상 관리 및 팀원 간 기능 분업을 진행하였습니다.
+
+<br/>
+
+**DBMS 고급 기술 활용**
+- Table 의 관계를 이해하고, `Join` 과 `SubQuery` 를 이용하여 다양한 조건으로 데이터를 조회하였습니다.
+
+<br/>
+
+**Linux 운영 체제 이해**
+- 운영 체제에 대한 이해를 바탕으로 계정 관리, 권한 설정, 디렉토리 관리 작업을 수행하였습니다.
+
+<br/>
+
+**GCP 서비스를 이용한 프로젝트 배포**
+- 클라우드 환경의 이해 및 적응, 배포 경험을 통해 현업에서의 적응력을 향상하였습니다.
